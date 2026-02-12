@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>🍄 数学马里奥 Math Mario</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== 语言选择页 ===== -->
+  <div id="page-lang-select" class="page active">
+    <div class="lang-select-container">
+      <div class="pixel-character" style="margin-bottom: 16px;">
+        <div class="character-body"></div>
+      </div>
+      <h1 class="game-title" style="margin-bottom: 12px;">
+        <span class="title-zh">数学马里奥</span>
+        <span class="title-en">Math Mario</span>
+      </h1>
+      <p class="welcome-name">Hi 毛毛! 🌟</p>
+      <p class="lang-select-hint">选择语言 / Choose Language</p>
+      <div class="lang-select-buttons">
+        <button class="pixel-btn btn-lang-zh" onclick="App.selectLang('zh')">
+          <span class="btn-icon">🇨🇳</span>
+          <span>中文模式</span>
+        </button>
+        <button class="pixel-btn btn-lang-en" onclick="App.selectLang('en')">
+          <span class="btn-icon">🇺🇸</span>
+          <span>English Mode</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 主页 ===== -->
+  <div id="page-home" class="page">
+    <div class="home-container">
+      <div class="pixel-stars" id="bg-stars"></div>
+      <h1 class="game-title">
+        <span class="title-zh">毛毛的数学马里奥</span>
+        <span class="title-en">Maomao's Math Mario</span>
+      </h1>
+      <div class="pixel-character" id="home-character">
+        <div class="character-body"></div>
+      </div>
+      <p class="home-greeting" id="home-greeting"></p>
+      <div class="home-stats" id="home-stats"></div>
+      <div class="home-buttons">
+        <button class="pixel-btn btn-learn" onclick="App.goTo('learn')">
+          <span class="btn-icon">🍄</span>
+          <span class="btn-zh">学习模式</span>
+          <span class="btn-en">Learn</span>
+        </button>
+        <button class="pixel-btn btn-practice" onclick="App.goTo('practice')">
+          <span class="btn-icon">🪙</span>
+          <span class="btn-zh">练习模式</span>
+          <span class="btn-en">Practice</span>
+        </button>
+        <button class="pixel-btn btn-challenge" onclick="App.goTo('challenge')">
+          <span class="btn-icon">🏰</span>
+          <span class="btn-zh">闯关模式</span>
+          <span class="btn-en">Challenge</span>
+        </button>
+      </div>
+      <button class="lang-toggle pixel-btn-small" onclick="App.toggleLang()">
+        <span id="lang-label">EN / 中</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 学习模式 ===== -->
+  <div id="page-learn" class="page">
+    <div class="page-header">
+      <button class="pixel-btn-small btn-back" onclick="App.goTo('home')">← <span data-i18n="back">返回</span></button>
+      <h2><span data-i18n="learn_title">🍄 学习模式</span></h2>
+    </div>
+    <div class="learn-container">
+      <!-- 等级选择 -->
+      <div id="learn-levels" class="level-grid"></div>
+      <!-- 学习内容 -->
+      <div id="learn-content" class="learn-content hidden">
+        <div class="learn-header">
+          <h3 id="learn-level-title"></h3>
+          <div class="learn-header-right">
+            <span id="learn-method-badge" class="method-badge"></span>
+            <span id="learn-step" class="step-indicator"></span>
+          </div>
+        </div>
+        <!-- 教学可视化区域 -->
+        <div id="learn-visual" class="visual-area"></div>
+        <!-- 等式显示 -->
+        <div class="equation-row">
+          <div id="learn-equation" class="equation-display"></div>
+          <button class="btn-speak" onclick="Learn.speakCurrent()" title="Read aloud">🔊</button>
+        </div>
+        <!-- 讲解文字 -->
+        <div id="learn-explanation" class="explanation-text"></div>
+        <!-- 点击继续 -->
+        <div id="learn-tap-area" class="hidden">
+          <button class="tap-continue" onclick="Learn.tapContinue()">
+            ❓ <span id="tap-text">点一下继续</span>
+          </button>
+        </div>
+        <!-- 互动选择题 -->
+        <div id="learn-choices" class="choice-buttons hidden"></div>
+        <!-- 测验区域 -->
+        <div id="learn-quiz" class="hidden">
+          <div class="equation-row">
+            <div id="learn-quiz-equation" class="equation-display"></div>
+            <button class="btn-speak" onclick="Learn.speakCurrent()" title="Read aloud">🔊</button>
+          </div>
+          <div id="learn-answer-display" class="answer-display"></div>
+          <div id="learn-numpad" class="numpad"></div>
+        </div>
+        <!-- 进度圆点 -->
+        <div id="learn-progress-dots" class="progress-dots"></div>
+        <!-- 导航 -->
+        <div class="learn-nav">
+          <button class="pixel-btn-small" id="learn-prev" onclick="Learn.prev()">← <span data-i18n="prev">上一步</span></button>
+          <button class="pixel-btn-small" id="learn-next" onclick="Learn.next()"><span data-i18n="next">下一步</span> →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 练习模式 ===== -->
+  <div id="page-practice" class="page">
+    <div class="page-header">
+      <button class="pixel-btn-small btn-back" onclick="App.goTo('home')">← <span data-i18n="back">返回</span></button>
+      <h2><span data-i18n="practice_title">🪙 练习模式</span></h2>
+    </div>
+    <!-- 练习设置 -->
+    <div id="practice-setup" class="practice-setup">
+      <div class="setup-section">
+        <h3 data-i18n="select_range">选择范围</h3>
+        <div class="setup-options" id="range-options">
+          <button class="pixel-btn-small setup-opt active" data-range="10">10</button>
+          <button class="pixel-btn-small setup-opt" data-range="20">20</button>
+          <button class="pixel-btn-small setup-opt" data-range="50">50</button>
+          <button class="pixel-btn-small setup-opt" data-range="100">100</button>
+        </div>
+      </div>
+      <div class="setup-section">
+        <h3 data-i18n="select_type">选择类型</h3>
+        <div class="setup-options" id="type-options">
+          <button class="pixel-btn-small setup-opt active" data-type="add">➕ <span data-i18n="addition">加法</span></button>
+          <button class="pixel-btn-small setup-opt" data-type="sub">➖ <span data-i18n="subtraction">减法</span></button>
+          <button class="pixel-btn-small setup-opt" data-type="mix">🔀 <span data-i18n="mixed">混合</span></button>
+        </div>
+      </div>
+      <button class="pixel-btn btn-start" onclick="Practice.start()">
+        <span data-i18n="start_practice">开始练习</span> 🚀
+      </button>
+    </div>
+    <!-- 练习中 -->
+    <div id="practice-game" class="game-area hidden">
+      <div class="game-top-bar">
+        <div class="progress-bar"><div id="practice-progress" class="progress-fill"></div></div>
+        <span id="practice-count" class="question-count">1/10</span>
+        <span id="practice-score" class="score-display">🪙 0</span>
+      </div>
+      <div class="equation-row">
+        <div id="practice-equation" class="equation-display large"></div>
+        <button class="btn-speak" onclick="Practice.speakCurrent()" title="Read aloud">🔊</button>
+      </div>
+      <div id="practice-answer" class="answer-display"></div>
+      <div id="practice-feedback" class="feedback-area"></div>
+      <div id="practice-numpad" class="numpad"></div>
+    </div>
+    <!-- 练习结果 -->
+    <div id="practice-result" class="result-area hidden">
+      <h3 id="result-title" class="result-title"></h3>
+      <div id="result-stars" class="result-stars"></div>
+      <div id="result-score" class="result-score"></div>
+      <div id="result-details" class="result-details"></div>
+      <div class="result-buttons">
+        <button class="pixel-btn btn-retry" onclick="Practice.start()">
+          🔄 <span data-i18n="retry">再来一次</span>
+        </button>
+        <button class="pixel-btn-small" onclick="Practice.showWrong()" id="btn-wrong-review">
+          📝 <span data-i18n="review_wrong">错题回顾</span>
+        </button>
+        <button class="pixel-btn-small" onclick="App.goTo('home')">
+          🏠 <span data-i18n="go_home">回主页</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 闯关模式 ===== -->
+  <div id="page-challenge" class="page">
+    <div class="page-header">
+      <button class="pixel-btn-small btn-back" onclick="App.goTo('home')">← <span data-i18n="back">返回</span></button>
+      <h2><span data-i18n="challenge_title">🏰 闯关模式</span></h2>
+    </div>
+    <!-- 关卡地图 -->
+    <div id="challenge-map" class="challenge-map"></div>
+    <!-- 闯关中 -->
+    <div id="challenge-game" class="game-area hidden">
+      <div class="game-top-bar">
+        <div id="challenge-timer" class="timer-display">⏱️ <span id="timer-value">30</span></div>
+        <span id="challenge-count" class="question-count">1/5</span>
+        <span id="challenge-level-label" class="level-label"></span>
+      </div>
+      <div class="equation-row">
+        <div id="challenge-equation" class="equation-display large"></div>
+        <button class="btn-speak" onclick="Challenge.speakCurrent()" title="Read aloud">🔊</button>
+      </div>
+      <div id="challenge-answer" class="answer-display"></div>
+      <div id="challenge-feedback" class="feedback-area"></div>
+      <div id="challenge-numpad" class="numpad"></div>
+    </div>
+    <!-- 闯关结果 -->
+    <div id="challenge-result" class="result-area hidden">
+      <h3 id="challenge-result-title" class="result-title"></h3>
+      <div id="challenge-result-stars" class="result-stars"></div>
+      <div id="challenge-result-details" class="result-details"></div>
+      <div class="result-buttons">
+        <button class="pixel-btn btn-retry" onclick="Challenge.retry()">
+          🔄 <span data-i18n="retry">再来一次</span>
+        </button>
+        <button class="pixel-btn-small" onclick="Challenge.showMap()">
+          🗺️ <span data-i18n="back_to_map">回到地图</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 音乐控制 ===== -->
+  <div class="music-controls" id="music-controls">
+    <button class="btn-music" id="btn-music" onclick="Music.toggle()" title="Play/Pause Music">
+      <span class="music-icon">🎵</span>
+    </button>
+    <button class="btn-music-next" onclick="Music.nextTrack()" title="Next Track">⏭</button>
+    <span class="music-label" id="music-label">OFF</span>
+  </div>
+
+  <!-- ===== 马里奥背景装饰 ===== -->
+  <div class="mario-bg-elements" id="mario-bg"></div>
+
+  <!-- ===== 全局动画层 ===== -->
+  <canvas id="fx-canvas"></canvas>
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
