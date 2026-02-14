@@ -84,6 +84,9 @@ const I18N = {
     learn_split_combine: '合起来：{0}+{1}={2}！',
     learn_split_done: '所以{0}{1}{2}={3}！',
     learn_split_question: '十位{0}{1}{2}=?',
+    learn_split_borrow: '个位{0}-{1}不够减！从十位借一个10！',
+    learn_split_borrow_tens: '十位：{0}-{1}={2}，再借走10，剩{3}！',
+    learn_split_borrow_ones: '个位：借来10，{0}变成{1}，{1}-{2}={3}！',
     // 巧算法 (100以内)
     learn_mental_start: '{0}{1}{2}，把{2}拆成{3}和{4}！',
     learn_mental_step1: '先算{0}{1}{2}={3}！',
@@ -177,6 +180,9 @@ const I18N = {
     learn_split_combine: 'Together: {0}+{1}={2}!',
     learn_split_done: 'So {0}{1}{2}={3}!',
     learn_split_question: 'Tens: {0}{1}{2}=?',
+    learn_split_borrow: 'Ones {0}-{1} not enough! Borrow 10 from tens!',
+    learn_split_borrow_tens: 'Tens: {0}-{1}={2}, borrow 10, left {3}!',
+    learn_split_borrow_ones: 'Ones: borrow 10, {0} becomes {1}, {1}-{2}={3}!',
     learn_mental_start: '{0}{1}{2}, split {2} into {3} and {4}!',
     learn_mental_step1: 'First: {0}{1}{2}={3}!',
     learn_mental_step2: 'Then: {0}{1}{2}={3}!',
@@ -953,32 +959,50 @@ const Learn = (() => {
     return { a, b, op: '-', answer: a - b };
   }
   function genSplitQ(difficulty) {
-    // 50以内加减法，十位+十位，个位+个位（不进位不借位）
-    // 加法：个位之和≤9，十位之和≤40
-    // 减法：a的个位≥b的个位，a的十位≥b的十位
-    const addCombos = [[23,14],[12,21],[32,15],[24,13],[31,12]];
-    const subCombos = [[37,14],[45,23],[39,16],[48,25],[36,12]];
+    // 50以内加减法，十位+十位，个位+个位
+    // 加法：不进位（个位之和≤9）
+    // 减法：前3题不借位，后面混合借位/不借位
+    // 不借位减法 e.g. 47-23  借位减法 e.g. 35-18
+    const addCombos = [[23,14],[12,21],[32,15]];
+    const subNoBorrow = [[37,14],[45,23]];  // 不借位
+    const subBorrow = [[35,18],[42,27],[33,16]]; // 借位
     if (difficulty < 3) {
       const [a,b] = addCombos[difficulty]; return { a, b, op: '+', answer: a + b };
     } else if (difficulty < 5) {
-      const [a,b] = subCombos[difficulty - 3]; return { a, b, op: '-', answer: a - b };
+      const [a,b] = subNoBorrow[difficulty - 3]; return { a, b, op: '-', answer: a - b };
+    } else if (difficulty < 7) {
+      const [a,b] = subBorrow[difficulty - 5]; return { a, b, op: '-', answer: a - b };
     }
-    const isAdd = Math.random() < 0.5;
+    // 随机生成
+    const isAdd = Math.random() < 0.4;
     if (isAdd) {
-      // 保证个位不进位：aOnes + bOnes ≤ 9
-      const aTens = (Math.floor(Math.random() * 3) + 1) * 10; // 10,20,30
-      const bTens = (Math.floor(Math.random() * 2) + 1) * 10; // 10,20
+      // 不进位加法
+      const aTens = (Math.floor(Math.random() * 3) + 1) * 10;
+      const bTens = (Math.floor(Math.random() * 2) + 1) * 10;
       if (aTens + bTens > 40) return { a: 23, b: 14, op: '+', answer: 37 };
-      const aOnes = Math.floor(Math.random() * 5) + 1; // 1-5
-      const bOnes = Math.floor(Math.random() * Math.min(5, 9 - aOnes)) + 1; // 确保和≤9
+      const aOnes = Math.floor(Math.random() * 5) + 1;
+      const bOnes = Math.floor(Math.random() * Math.min(5, 9 - aOnes)) + 1;
       return { a: aTens + aOnes, b: bTens + bOnes, op: '+', answer: aTens + bTens + aOnes + bOnes };
     } else {
-      // 保证个位不借位：aOnes ≥ bOnes，aTens ≥ bTens
-      const aTens = (Math.floor(Math.random() * 3) + 2) * 10; // 20,30,40
-      const bTens = (Math.floor(Math.random() * (aTens / 10 - 1)) + 1) * 10; // 10..aTens-10
-      const aOnes = Math.floor(Math.random() * 5) + 4; // 4-8
-      const bOnes = Math.floor(Math.random() * aOnes) + 1; // 1..aOnes
-      return { a: aTens + aOnes, b: bTens + bOnes, op: '-', answer: (aTens - bTens) + (aOnes - bOnes) };
+      // 减法：50%不借位，50%借位
+      const doBorrow = Math.random() < 0.5;
+      if (doBorrow) {
+        // 借位减法：aOnes < bOnes，且 aTens - bTens >= 10 (借完十位还≥0)
+        const aTens = (Math.floor(Math.random() * 2) + 2) * 10; // 20,30
+        const bTens = (Math.floor(Math.random() * (aTens / 10 - 1)) + 1) * 10;
+        if (aTens - bTens < 10) return { a: 35, b: 18, op: '-', answer: 17 };
+        const aOnes = Math.floor(Math.random() * 4) + 2; // 2-5
+        const bOnes = Math.floor(Math.random() * (9 - aOnes)) + aOnes + 1; // aOnes+1 .. 9
+        const a = aTens + aOnes, b = bTens + bOnes;
+        return { a, b, op: '-', answer: a - b };
+      } else {
+        // 不借位减法
+        const aTens = (Math.floor(Math.random() * 3) + 2) * 10;
+        const bTens = (Math.floor(Math.random() * (aTens / 10 - 1)) + 1) * 10;
+        const aOnes = Math.floor(Math.random() * 5) + 4;
+        const bOnes = Math.floor(Math.random() * aOnes) + 1;
+        return { a: aTens + aOnes, b: bTens + bOnes, op: '-', answer: (aTens - bTens) + (aOnes - bOnes) };
+      }
     }
   }
   function genMentalQ(difficulty) {
@@ -1514,34 +1538,53 @@ const Learn = (() => {
     const bTens = Math.floor(q.b / 10) * 10;
     const bOnes = q.b % 10;
     const opSign = q.op;
-    const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
-    const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
+    const needBorrow = q.op === '-' && aOnes < bOnes;
 
     eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
 
     const subSteps = [
       { action: 'start', text: fmt('learn_split_start', q.a, opSign, q.b) },
       { action: 'show', text: fmt('learn_split_show', q.a, aTens, aOnes, q.b, bTens, bOnes) },
-      { action: 'tens', text: fmt('learn_split_tens', aTens, opSign, bTens, tensResult) },
-      { action: 'ones', text: fmt('learn_split_ones', aOnes, opSign, bOnes, onesResult) },
-      { action: 'combine', text: fmt('learn_split_combine', tensResult, onesResult, q.answer) },
-      { action: 'done', text: fmt('learn_split_done', q.a, opSign, q.b, q.answer) },
     ];
+
+    if (needBorrow) {
+      // 借位流程: 35-18 → 个位5<8不够减 → 十位30-10=20,借10剩10 → 个位15-8=7 → 10+7=17
+      const tensAfterBorrow = aTens - bTens - 10; // 30-10-10=10
+      const onesWithBorrow = aOnes + 10;           // 5+10=15
+      const onesResult = onesWithBorrow - bOnes;   // 15-8=7
+      subSteps.push({ action: 'borrow', text: fmt('learn_split_borrow', aOnes, bOnes) });
+      subSteps.push({ action: 'borrow_tens', text: fmt('learn_split_borrow_tens', aTens, bTens, aTens - bTens, tensAfterBorrow), data: { tensAfterBorrow } });
+      subSteps.push({ action: 'borrow_ones', text: fmt('learn_split_borrow_ones', aOnes, onesWithBorrow, bOnes, onesResult), data: { onesWithBorrow, onesResult } });
+      subSteps.push({ action: 'combine', text: fmt('learn_split_combine', tensAfterBorrow, onesResult, q.answer), data: { tensAfterBorrow, onesResult } });
+    } else {
+      // 不借位流程
+      const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
+      const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
+      subSteps.push({ action: 'tens', text: fmt('learn_split_tens', aTens, opSign, bTens, tensResult), data: { tensResult, onesResult } });
+      subSteps.push({ action: 'ones', text: fmt('learn_split_ones', aOnes, opSign, bOnes, onesResult), data: { tensResult, onesResult } });
+      subSteps.push({ action: 'combine', text: fmt('learn_split_combine', tensResult, onesResult, q.answer), data: { tensResult: tensResult, onesResult } });
+    }
+    subSteps.push({ action: 'done', text: fmt('learn_split_done', q.a, opSign, q.b, q.answer) });
 
     let si = 0;
     function renderSub() {
       const s = subSteps[si];
       exp.textContent = s.text; currentSpeechText = s.text;
       Speech.speak(s.text, 0.85);
-      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, s.action);
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, s, needBorrow);
       if (s.action === 'show') {
         eq.innerHTML = `<span class="highlight-gold">${aTens}</span><span>+${aOnes}</span> <span class="op">${opSign}</span> <span class="highlight-gold">${bTens}</span><span>+${bOnes}</span> <span class="eq">=</span> <span class="blank">?</span>`;
-      } else if (s.action === 'tens') {
-        eq.innerHTML = `<span class="highlight-gold">${aTens}${opSign}${bTens}=${tensResult}</span>  <span style="opacity:0.4">${aOnes}${opSign}${bOnes}=?</span>`;
-      } else if (s.action === 'ones') {
-        eq.innerHTML = `<span style="opacity:0.4">${tensResult}</span>  <span class="highlight-green">${aOnes}${opSign}${bOnes}=${onesResult}</span>`;
+      } else if (s.action === 'borrow') {
+        eq.innerHTML = `<span style="opacity:0.4">${aTens}-${bTens}=?</span>  <span class="highlight-red">${aOnes}-${bOnes}=? ⚠️</span>`;
+      } else if (s.action === 'tens' || s.action === 'borrow_tens') {
+        const tr = s.data.tensAfterBorrow !== undefined ? s.data.tensAfterBorrow : s.data.tensResult;
+        eq.innerHTML = `<span class="highlight-gold">🔟 ${tr}</span>  <span style="opacity:0.4">🔢 ?</span>`;
+      } else if (s.action === 'ones' || s.action === 'borrow_ones') {
+        const or = s.data.onesResult;
+        eq.innerHTML = `<span style="opacity:0.4">🔟</span>  <span class="highlight-green">🔢 ${or}</span>`;
       } else if (s.action === 'combine') {
-        eq.innerHTML = `<span class="highlight-gold">${tensResult}</span> <span class="op">+</span> <span class="highlight-green">${onesResult}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
+        const tr = s.data.tensResult !== undefined ? s.data.tensResult : s.data.tensAfterBorrow;
+        eq.innerHTML = `<span class="highlight-gold">${tr}</span> <span class="op">+</span> <span class="highlight-green">${s.data.onesResult}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
       } else if (s.action === 'done') {
         eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
         Sound.correct();
@@ -1552,7 +1595,8 @@ const Learn = (() => {
     renderSub();
   }
 
-  function buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, action) {
+  function buildSplitVisual(q, aTens, aOnes, bTens, bOnes, step, needBorrow) {
+    const action = step.action;
     let html = '<div class="split-visual">';
     // 两个数的拆分树
     html += '<div class="split-both">';
@@ -1560,17 +1604,41 @@ const Learn = (() => {
     html += `<div class="split-op">${q.op}</div>`;
     html += buildOneTree(q.b, bTens, bOnes, action !== 'start');
     html += '</div>';
+
     // 计算步骤
-    if (action === 'tens' || action === 'ones' || action === 'combine' || action === 'done') {
+    const showSteps = action !== 'start' && action !== 'show';
+    if (showSteps) {
       html += '<div class="split-steps">';
-      html += `<div class="split-step${action === 'tens' ? ' active' : ' done'}">`;
-      html += `🔟 ${aTens} ${q.op} ${bTens} = <b>${tensResult}</b></div>`;
-      if (action !== 'tens') {
-        html += `<div class="split-step${action === 'ones' ? ' active' : ' done'}">`;
-        html += `🔢 ${aOnes} ${q.op} ${bOnes} = <b>${onesResult}</b></div>`;
-      }
-      if (action === 'combine' || action === 'done') {
-        html += `<div class="split-step active">✨ ${tensResult} + ${onesResult} = <b>${q.answer}</b></div>`;
+      if (needBorrow) {
+        // 借位流程
+        if (action === 'borrow') {
+          html += `<div class="split-step active" style="border-color:var(--danger)">⚠️ ${aOnes} - ${bOnes} 不够减！借10！</div>`;
+        } else if (action === 'borrow_tens') {
+          html += `<div class="split-step done">⚠️ ${aOnes} < ${bOnes}，借10</div>`;
+          html += `<div class="split-step active">🔟 ${aTens}-${bTens}=${aTens - bTens}，借走10，剩<b>${step.data.tensAfterBorrow}</b></div>`;
+        } else if (action === 'borrow_ones') {
+          html += `<div class="split-step done">🔟 十位剩 ${step.data.tensAfterBorrow !== undefined ? step.data.tensAfterBorrow : ''}</div>`;
+          html += `<div class="split-step active">🔢 ${aOnes}+10=${aOnes + 10}，${aOnes + 10}-${bOnes}=<b>${step.data.onesResult}</b></div>`;
+        } else {
+          const tr = step.data.tensAfterBorrow !== undefined ? step.data.tensAfterBorrow : step.data.tensResult;
+          html += `<div class="split-step done">🔟 十位：${tr}</div>`;
+          html += `<div class="split-step done">🔢 个位：${step.data.onesResult}</div>`;
+          html += `<div class="split-step active">✨ ${tr}+${step.data.onesResult}=<b>${q.answer}</b></div>`;
+        }
+      } else {
+        // 不借位流程
+        const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
+        const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
+        if (action === 'tens') {
+          html += `<div class="split-step active">🔟 ${aTens} ${q.op} ${bTens} = <b>${tensResult}</b></div>`;
+        } else if (action === 'ones') {
+          html += `<div class="split-step done">🔟 ${aTens} ${q.op} ${bTens} = ${tensResult}</div>`;
+          html += `<div class="split-step active">🔢 ${aOnes} ${q.op} ${bOnes} = <b>${onesResult}</b></div>`;
+        } else {
+          html += `<div class="split-step done">🔟 ${tensResult}</div>`;
+          html += `<div class="split-step done">🔢 ${onesResult}</div>`;
+          html += `<div class="split-step active">✨ ${tensResult}+${onesResult}=<b>${q.answer}</b></div>`;
+        }
       }
       html += '</div>';
     }
@@ -1821,34 +1889,73 @@ const Learn = (() => {
     const bTens = Math.floor(q.b / 10) * 10;
     const bOnes = q.b % 10;
     const opSign = q.op;
-    const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
-    const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
+    const needBorrow = q.op === '-' && aOnes < bOnes;
 
     eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
-    vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'show');
-    exp.textContent = fmt('learn_split_question', aTens, opSign, bTens);
-    currentSpeechText = exp.textContent;
-    Speech.speak(currentSpeechText, 0.85);
 
-    const w1 = tensResult + 10, w2 = Math.max(0, tensResult - 10);
-    showChoices([tensResult, w1, w2], tensResult, () => {
-      // 第2步：个位加个位
-      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'ones');
-      exp.textContent = fmt('learn_split_ones', aOnes, opSign, bOnes, '?');
+    if (needBorrow) {
+      // 借位互动：问十位借完后剩多少，再问个位借10后减等于几
+      const tensAfterBorrow = aTens - bTens - 10;
+      const onesWithBorrow = aOnes + 10;
+      const onesResult = onesWithBorrow - bOnes;
+
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'borrow', data: {} }, true);
+      exp.textContent = fmt('learn_split_borrow', aOnes, bOnes);
       currentSpeechText = exp.textContent;
       Speech.speak(currentSpeechText, 0.85);
-      const w3 = onesResult + 2, w4 = Math.max(0, onesResult - 2);
-      showChoices([onesResult, w3, w4], onesResult, () => {
-        // 完成
-        vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'done');
-        const blank = document.querySelector('#learn-equation .blank');
-        if (blank) { blank.textContent = q.answer; blank.style.color = 'var(--success)'; }
-        exp.textContent = fmt('learn_split_done', q.a, opSign, q.b, q.answer);
-        Sound.correct();
-        Speech.speak(sp(`${q.answer}！毛毛太棒了！`, `${q.answer}! Great job Maomao!`), 0.85);
-        showTapContinue();
+      showTapContinue(() => {
+        // 问十位借完剩多少
+        vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'borrow_tens', data: { tensAfterBorrow } }, true);
+        exp.textContent = sp(
+          `十位：${aTens}-${bTens}=${aTens - bTens}，再借走10，剩几？`,
+          `Tens: ${aTens}-${bTens}=${aTens - bTens}, borrow 10, what's left?`
+        );
+        currentSpeechText = exp.textContent;
+        Speech.speak(currentSpeechText, 0.85);
+        showChoices([tensAfterBorrow, tensAfterBorrow + 10, Math.max(0, tensAfterBorrow - 10)], tensAfterBorrow, () => {
+          // 问个位
+          vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'borrow_ones', data: { tensAfterBorrow, onesResult } }, true);
+          exp.textContent = sp(
+            `个位：${aOnes}借10变${onesWithBorrow}，${onesWithBorrow}-${bOnes}=?`,
+            `Ones: ${aOnes} borrows 10 becomes ${onesWithBorrow}, ${onesWithBorrow}-${bOnes}=?`
+          );
+          currentSpeechText = exp.textContent;
+          Speech.speak(currentSpeechText, 0.85);
+          showChoices([onesResult, onesResult + 2, Math.max(0, onesResult - 2)], onesResult, () => {
+            finishSplit({ tensAfterBorrow, onesResult });
+          });
+        });
       });
-    });
+    } else {
+      // 不借位互动
+      const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
+      const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
+
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'show', data: {} }, false);
+      exp.textContent = fmt('learn_split_question', aTens, opSign, bTens);
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+
+      showChoices([tensResult, tensResult + 10, Math.max(0, tensResult - 10)], tensResult, () => {
+        vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'ones', data: { tensResult, onesResult } }, false);
+        exp.textContent = fmt('learn_split_ones', aOnes, opSign, bOnes, '?');
+        currentSpeechText = exp.textContent;
+        Speech.speak(currentSpeechText, 0.85);
+        showChoices([onesResult, onesResult + 2, Math.max(0, onesResult - 2)], onesResult, () => {
+          finishSplit({ tensResult, onesResult });
+        });
+      });
+    }
+
+    function finishSplit(data) {
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, { action: 'done', data }, needBorrow);
+      const blank = document.querySelector('#learn-equation .blank');
+      if (blank) { blank.textContent = q.answer; blank.style.color = 'var(--success)'; }
+      exp.textContent = fmt('learn_split_done', q.a, opSign, q.b, q.answer);
+      Sound.correct();
+      Speech.speak(sp(`${q.answer}！毛毛太棒了！`, `${q.answer}! Great job Maomao!`), 0.85);
+      showTapContinue();
+    }
   }
 
   function renderMentalInteractive(q) {

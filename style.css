@@ -544,6 +544,7 @@ body::after {
 }
 .highlight-gold { color: var(--coin-gold) !important; font-weight: 900; }
 .highlight-green { color: var(--success) !important; font-weight: 900; }
+.highlight-red { color: var(--danger) !important; font-weight: 900; }
 
 /* ===== 10的好朋友 ===== */
 .bonds-visual {
