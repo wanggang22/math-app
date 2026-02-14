@@ -77,11 +77,13 @@ const I18N = {
     learn_make_ten_question: '{0}还差几凑成10？',
     learn_break_ten_question: '10减{0}等于几？',
     // 拆分法 (50以内)
-    learn_split_start: '{0}{1}{2}，先把{2}拆开！',
-    learn_split_tens: '先算{0}{1}{2}={3}！',
-    learn_split_ones: '再算{0}{1}{2}={3}！',
+    learn_split_start: '{0}{1}{2}，我们把两个数都拆开！',
+    learn_split_show: '{0}拆成{1}和{2}，{3}拆成{4}和{5}！',
+    learn_split_tens: '十位：{0}{1}{2}={3}！',
+    learn_split_ones: '个位：{0}{1}{2}={3}！',
+    learn_split_combine: '合起来：{0}+{1}={2}！',
     learn_split_done: '所以{0}{1}{2}={3}！',
-    learn_split_question: '先算整十：{0}{1}{2}=?',
+    learn_split_question: '十位{0}{1}{2}=?',
     // 巧算法 (100以内)
     learn_mental_start: '{0}{1}{2}，把{2}拆成{3}和{4}！',
     learn_mental_step1: '先算{0}{1}{2}={3}！',
@@ -168,11 +170,13 @@ const I18N = {
     learn_doubles_near_intro: '{0}+{1}, almost doubles!',
     learn_doubles_question: '{0}+{0} equals?',
     learn_doubles_near_question: '{0}+{1}, first {0}+{0}=?',
-    learn_split_start: '{0}{1}{2}, split {2} apart!',
-    learn_split_tens: 'First: {0}{1}{2}={3}!',
-    learn_split_ones: 'Then: {0}{1}{2}={3}!',
+    learn_split_start: '{0}{1}{2}, split both numbers!',
+    learn_split_show: '{0} is {1} and {2}, {3} is {4} and {5}!',
+    learn_split_tens: 'Tens: {0}{1}{2}={3}!',
+    learn_split_ones: 'Ones: {0}{1}{2}={3}!',
+    learn_split_combine: 'Together: {0}+{1}={2}!',
     learn_split_done: 'So {0}{1}{2}={3}!',
-    learn_split_question: 'Tens first: {0}{1}{2}=?',
+    learn_split_question: 'Tens: {0}{1}{2}=?',
     learn_mental_start: '{0}{1}{2}, split {2} into {3} and {4}!',
     learn_mental_step1: 'First: {0}{1}{2}={3}!',
     learn_mental_step2: 'Then: {0}{1}{2}={3}!',
@@ -949,9 +953,11 @@ const Learn = (() => {
     return { a, b, op: '-', answer: a - b };
   }
   function genSplitQ(difficulty) {
-    // 50以内加减法，b必须≥10（有整十部分）
-    const addCombos = [[23,14],[18,21],[32,15],[27,12],[35,13]];
-    const subCombos = [[37,14],[45,23],[39,16],[48,25],[42,18]];
+    // 50以内加减法，十位+十位，个位+个位（不进位不借位）
+    // 加法：个位之和≤9，十位之和≤40
+    // 减法：a的个位≥b的个位，a的十位≥b的十位
+    const addCombos = [[23,14],[12,21],[32,15],[24,13],[31,12]];
+    const subCombos = [[37,14],[45,23],[39,16],[48,25],[36,12]];
     if (difficulty < 3) {
       const [a,b] = addCombos[difficulty]; return { a, b, op: '+', answer: a + b };
     } else if (difficulty < 5) {
@@ -959,17 +965,20 @@ const Learn = (() => {
     }
     const isAdd = Math.random() < 0.5;
     if (isAdd) {
-      const a = Math.floor(Math.random() * 15) + 12; // 12-26
-      let b = Math.floor(Math.random() * 10) + 10; // 10-19，保证有整十部分
-      if (a + b > 50) b = 50 - a;
-      if (b < 10) b = 10; // 确保b≥10
-      return { a, b, op: '+', answer: a + b };
+      // 保证个位不进位：aOnes + bOnes ≤ 9
+      const aTens = (Math.floor(Math.random() * 3) + 1) * 10; // 10,20,30
+      const bTens = (Math.floor(Math.random() * 2) + 1) * 10; // 10,20
+      if (aTens + bTens > 40) return { a: 23, b: 14, op: '+', answer: 37 };
+      const aOnes = Math.floor(Math.random() * 5) + 1; // 1-5
+      const bOnes = Math.floor(Math.random() * Math.min(5, 9 - aOnes)) + 1; // 确保和≤9
+      return { a: aTens + aOnes, b: bTens + bOnes, op: '+', answer: aTens + bTens + aOnes + bOnes };
     } else {
-      const a = Math.floor(Math.random() * 15) + 30; // 30-44
-      let b = Math.floor(Math.random() * 10) + 10; // 10-19
-      if (b >= a) b = a - 10;
-      if (b < 10) b = 10;
-      return { a, b, op: '-', answer: a - b };
+      // 保证个位不借位：aOnes ≥ bOnes，aTens ≥ bTens
+      const aTens = (Math.floor(Math.random() * 3) + 2) * 10; // 20,30,40
+      const bTens = (Math.floor(Math.random() * (aTens / 10 - 1)) + 1) * 10; // 10..aTens-10
+      const aOnes = Math.floor(Math.random() * 5) + 4; // 4-8
+      const bOnes = Math.floor(Math.random() * aOnes) + 1; // 1..aOnes
+      return { a: aTens + aOnes, b: bTens + bOnes, op: '-', answer: (aTens - bTens) + (aOnes - bOnes) };
     }
   }
   function genMentalQ(difficulty) {
@@ -1500,38 +1509,40 @@ const Learn = (() => {
     const exp = document.getElementById('learn-explanation');
     vis.style.display = 'flex'; eq.style.display = 'block'; exp.style.display = 'block';
 
+    const aTens = Math.floor(q.a / 10) * 10;
+    const aOnes = q.a % 10;
     const bTens = Math.floor(q.b / 10) * 10;
     const bOnes = q.b % 10;
-    const mid = q.op === '+' ? q.a + bTens : q.a - bTens;
-    const opWord = q.op === '+' ? 'plus' : 'minus';
     const opSign = q.op;
+    const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
+    const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
 
     eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
 
     const subSteps = [
       { action: 'start', text: fmt('learn_split_start', q.a, opSign, q.b) },
-      { action: 'tens', text: fmt('learn_split_tens', q.a, opSign, bTens, mid) },
+      { action: 'show', text: fmt('learn_split_show', q.a, aTens, aOnes, q.b, bTens, bOnes) },
+      { action: 'tens', text: fmt('learn_split_tens', aTens, opSign, bTens, tensResult) },
+      { action: 'ones', text: fmt('learn_split_ones', aOnes, opSign, bOnes, onesResult) },
+      { action: 'combine', text: fmt('learn_split_combine', tensResult, onesResult, q.answer) },
+      { action: 'done', text: fmt('learn_split_done', q.a, opSign, q.b, q.answer) },
     ];
-    if (bOnes > 0) {
-      subSteps.push({ action: 'ones', text: fmt('learn_split_ones', mid, opSign, bOnes, q.answer) });
-    }
-    subSteps.push({ action: 'done', text: fmt('learn_split_done', q.a, opSign, q.b, q.answer) });
 
     let si = 0;
     function renderSub() {
       const s = subSteps[si];
       exp.textContent = s.text; currentSpeechText = s.text;
       Speech.speak(s.text, 0.85);
-      if (s.action === 'start') {
-        vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, null, null);
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, s.action);
+      if (s.action === 'show') {
+        eq.innerHTML = `<span class="highlight-gold">${aTens}</span><span>+${aOnes}</span> <span class="op">${opSign}</span> <span class="highlight-gold">${bTens}</span><span>+${bOnes}</span> <span class="eq">=</span> <span class="blank">?</span>`;
       } else if (s.action === 'tens') {
-        vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, { a: q.a, op: opSign, b: bTens, result: mid }, null);
-        eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span class="highlight-gold">${bTens}</span> <span class="op">${opSign}</span> <span>${bOnes}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+        eq.innerHTML = `<span class="highlight-gold">${aTens}${opSign}${bTens}=${tensResult}</span>  <span style="opacity:0.4">${aOnes}${opSign}${bOnes}=?</span>`;
       } else if (s.action === 'ones') {
-        vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, { a: q.a, op: opSign, b: bTens, result: mid, done: true }, { a: mid, op: opSign, b: bOnes, result: q.answer });
-        eq.innerHTML = `<span class="highlight-green">${mid}</span> <span class="op">${opSign}</span> <span class="highlight-gold">${bOnes}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+        eq.innerHTML = `<span style="opacity:0.4">${tensResult}</span>  <span class="highlight-green">${aOnes}${opSign}${bOnes}=${onesResult}</span>`;
+      } else if (s.action === 'combine') {
+        eq.innerHTML = `<span class="highlight-gold">${tensResult}</span> <span class="op">+</span> <span class="highlight-green">${onesResult}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
       } else if (s.action === 'done') {
-        vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, null, null, true, q.answer);
         eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
         Sound.correct();
       }
@@ -1541,27 +1552,41 @@ const Learn = (() => {
     renderSub();
   }
 
-  function buildSplitVisual(num, tens, ones, op, step1, step2, done, answer) {
+  function buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, action) {
     let html = '<div class="split-visual">';
-    // 拆分图
-    html += `<div class="split-tree">`;
-    html += `<div class="split-num">${num}</div>`;
-    html += `<div class="split-branches">✂️</div>`;
-    html += `<div class="split-parts"><span class="split-part tens">${tens}</span><span class="split-part ones">${ones}</span></div>`;
+    // 两个数的拆分树
+    html += '<div class="split-both">';
+    html += buildOneTree(q.a, aTens, aOnes, action !== 'start');
+    html += `<div class="split-op">${q.op}</div>`;
+    html += buildOneTree(q.b, bTens, bOnes, action !== 'start');
     html += '</div>';
-    // 步骤
-    if (step1) {
-      html += `<div class="split-step${step1.done ? ' done' : ' active'}">`;
-      html += `${step1.a} ${step1.op} ${step1.b} = <b>${step1.result}</b></div>`;
-    }
-    if (step2) {
-      html += `<div class="split-step active">${step2.a} ${step2.op} ${step2.b} = <b>${step2.result}</b></div>`;
-    }
-    if (done) {
-      html += `<div class="split-answer">= ${answer} ✅</div>`;
+    // 计算步骤
+    if (action === 'tens' || action === 'ones' || action === 'combine' || action === 'done') {
+      html += '<div class="split-steps">';
+      html += `<div class="split-step${action === 'tens' ? ' active' : ' done'}">`;
+      html += `🔟 ${aTens} ${q.op} ${bTens} = <b>${tensResult}</b></div>`;
+      if (action !== 'tens') {
+        html += `<div class="split-step${action === 'ones' ? ' active' : ' done'}">`;
+        html += `🔢 ${aOnes} ${q.op} ${bOnes} = <b>${onesResult}</b></div>`;
+      }
+      if (action === 'combine' || action === 'done') {
+        html += `<div class="split-step active">✨ ${tensResult} + ${onesResult} = <b>${q.answer}</b></div>`;
+      }
+      html += '</div>';
     }
     html += '</div>';
     return html;
+
+    function buildOneTree(num, tens, ones, showParts) {
+      let t = '<div class="split-tree">';
+      t += `<div class="split-num">${num}</div>`;
+      if (showParts) {
+        t += '<div class="split-branches">✂️</div>';
+        t += `<div class="split-parts"><span class="split-part tens">${tens}</span><span class="split-part ones">${ones}</span></div>`;
+      }
+      t += '</div>';
+      return t;
+    }
   }
 
   // --- 巧算法引导 (100以内) ---
@@ -1791,43 +1816,39 @@ const Learn = (() => {
     const vis = document.getElementById('learn-visual');
     vis.style.display = 'flex'; eq.style.display = 'block'; exp.style.display = 'block';
 
+    const aTens = Math.floor(q.a / 10) * 10;
+    const aOnes = q.a % 10;
     const bTens = Math.floor(q.b / 10) * 10;
     const bOnes = q.b % 10;
-    const mid = q.op === '+' ? q.a + bTens : q.a - bTens;
-    const opWord = q.op === '+' ? 'plus' : 'minus';
     const opSign = q.op;
+    const tensResult = q.op === '+' ? aTens + bTens : aTens - bTens;
+    const onesResult = q.op === '+' ? aOnes + bOnes : aOnes - bOnes;
 
     eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
-    vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, null, null);
-    exp.textContent = fmt('learn_split_question', q.a, opSign, bTens);
+    vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'show');
+    exp.textContent = fmt('learn_split_question', aTens, opSign, bTens);
     currentSpeechText = exp.textContent;
     Speech.speak(currentSpeechText, 0.85);
 
-    const w1 = mid + (Math.random() < 0.5 ? 10 : -10);
-    const w2 = mid + (Math.random() < 0.5 ? 5 : -5);
-    showChoices([mid, Math.max(0, w1), Math.max(0, w2)], mid, () => {
-      if (bOnes > 0) {
-        exp.textContent = fmt('learn_split_ones', mid, opSign, bOnes, '?');
-        currentSpeechText = exp.textContent;
-        Speech.speak(currentSpeechText, 0.85);
-        const w3 = q.answer + 3, w4 = Math.max(0, q.answer - 3);
-        showChoices([q.answer, w3, w4], q.answer, () => {
-          finishSplit();
-        });
-      } else {
-        finishSplit();
-      }
+    const w1 = tensResult + 10, w2 = Math.max(0, tensResult - 10);
+    showChoices([tensResult, w1, w2], tensResult, () => {
+      // 第2步：个位加个位
+      vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'ones');
+      exp.textContent = fmt('learn_split_ones', aOnes, opSign, bOnes, '?');
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+      const w3 = onesResult + 2, w4 = Math.max(0, onesResult - 2);
+      showChoices([onesResult, w3, w4], onesResult, () => {
+        // 完成
+        vis.innerHTML = buildSplitVisual(q, aTens, aOnes, bTens, bOnes, tensResult, onesResult, 'done');
+        const blank = document.querySelector('#learn-equation .blank');
+        if (blank) { blank.textContent = q.answer; blank.style.color = 'var(--success)'; }
+        exp.textContent = fmt('learn_split_done', q.a, opSign, q.b, q.answer);
+        Sound.correct();
+        Speech.speak(sp(`${q.answer}！毛毛太棒了！`, `${q.answer}! Great job Maomao!`), 0.85);
+        showTapContinue();
+      });
     });
-
-    function finishSplit() {
-      vis.innerHTML = buildSplitVisual(q.b, bTens, bOnes, opSign, null, null, true, q.answer);
-      const blank = document.querySelector('#learn-equation .blank');
-      if (blank) { blank.textContent = q.answer; blank.style.color = 'var(--success)'; }
-      exp.textContent = fmt('learn_split_done', q.a, opSign, q.b, q.answer);
-      Sound.correct();
-      Speech.speak(sp(`${q.answer}！毛毛太棒了！`, `${q.answer}! Great job Maomao!`), 0.85);
-      showTapContinue();
-    }
   }
 
   function renderMentalInteractive(q) {
