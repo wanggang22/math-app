@@ -45,6 +45,8 @@
       </div>
       <p class="home-greeting" id="home-greeting"></p>
       <div class="home-stats" id="home-stats"></div>
+      <!-- 成就徽章展示 -->
+      <div class="home-achievements" id="home-achievements"></div>
       <div class="home-buttons">
         <button class="pixel-btn btn-learn" onclick="App.goTo('learn')">
           <span class="btn-icon">🍄</span>
@@ -60,6 +62,14 @@
           <span class="btn-icon">🏰</span>
           <span class="btn-zh">闯关模式</span>
           <span class="btn-en">Challenge</span>
+        </button>
+      </div>
+      <div class="home-buttons-secondary">
+        <button class="pixel-btn-small" onclick="App.goTo('achievements')">
+          🏆 <span data-i18n="achievements_title">成就</span>
+        </button>
+        <button class="pixel-btn-small" onclick="ParentDashboard.show()">
+          📊 <span data-i18n="parent_title">家长面板</span>
         </button>
       </div>
       <button class="lang-toggle pixel-btn-small" onclick="App.toggleLang()">
@@ -148,6 +158,19 @@
           <button class="pixel-btn-small setup-opt" data-type="mix">🔀 <span data-i18n="mixed">混合</span></button>
         </div>
       </div>
+      <div class="setup-section">
+        <h3 data-i18n="select_count">选择题数</h3>
+        <div class="setup-options" id="count-options">
+          <button class="pixel-btn-small setup-opt" data-count="5">5</button>
+          <button class="pixel-btn-small setup-opt active" data-count="10">10</button>
+          <button class="pixel-btn-small setup-opt" data-count="20">20</button>
+        </div>
+      </div>
+      <div class="setup-section">
+        <button class="pixel-btn-small setup-opt" id="btn-story-mode">
+          📖 <span data-i18n="story_mode">故事题</span>
+        </button>
+      </div>
       <button class="pixel-btn btn-start" onclick="Practice.start()">
         <span data-i18n="start_practice">开始练习</span> 🚀
       </button>
@@ -223,6 +246,28 @@
           🗺️ <span data-i18n="back_to_map">回到地图</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== 成就页 ===== -->
+  <div id="page-achievements" class="page">
+    <div class="page-header">
+      <button class="pixel-btn-small btn-back" onclick="App.goTo('home')">← <span data-i18n="back">返回</span></button>
+      <h2><span data-i18n="achievements_title">🏆 成就</span></h2>
+    </div>
+    <div class="achievements-container">
+      <div id="achievements-grid" class="achievements-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== 家长面板 ===== -->
+  <div id="page-parent" class="page">
+    <div class="page-header">
+      <button class="pixel-btn-small btn-back" onclick="App.goTo('home')">← <span data-i18n="back">返回</span></button>
+      <h2><span data-i18n="parent_title">📊 家长面板</span></h2>
+    </div>
+    <div class="parent-container">
+      <div id="parent-content"></div>
     </div>
   </div>
 
