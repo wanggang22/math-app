@@ -58,7 +58,7 @@ const I18N = {
     learn_comp_calc: '先算{0}{1}{2}={3}！',
     learn_comp_adjust: '多{0}了{1}，所以要{2}回{1}！',
     learn_comp_done: '所以{0}{1}{2}={3}！',
-    learn_comp_question: '把{0}看成{1}，先算{2}{3}{1}=?',
+    learn_comp_question: '把{0}看成{1}，先算{1}{3}{2}=?',
     // 10的好朋友
     learn_bonds_song: '1和9，2和8，3和7，4和6，5和5，凑成10顶呱呱！',
     learn_bonds_pair: '{0}和{1}是好朋友，{0}+{1}=10！',
@@ -218,7 +218,7 @@ const I18N = {
     learn_comp_calc: 'First: {0}{1}{2}={3}!',
     learn_comp_adjust: 'We added {1} extra, so subtract {1} back!',
     learn_comp_done: 'So {0}{1}{2}={3}!',
-    learn_comp_question: 'Think of {0} as {1}, what is {2}{3}{1}?',
+    learn_comp_question: 'Think of {0} as {1}, what is {1}{3}{2}?',
     learn_bonds_song: '1 and 9, 2 and 8, 3 and 7, 4 and 6, 5 and 5, they all make 10!',
     learn_bonds_pair: '{0} and {1} are friends! {0}+{1}=10!',
     learn_bonds_question: "Who is {0}'s friend? {0}+?=10",
@@ -2080,7 +2080,7 @@ const Learn = (() => {
     vis.innerHTML = `<div class="split-visual"><div class="split-steps">
       <div class="split-step">${q.a} ≈ ${roundTo}</div>
     </div></div>`;
-    exp.textContent = fmt('learn_comp_question', q.a, roundTo, roundTo, q.op);
+    exp.textContent = fmt('learn_comp_question', q.a, roundTo, q.b, q.op);
     currentSpeechText = exp.textContent;
     Speech.speak(currentSpeechText, 0.85);
 
