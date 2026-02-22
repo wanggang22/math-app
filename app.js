@@ -1428,10 +1428,10 @@ const Learn = (() => {
     eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
 
     const subSteps = [
-      { action: 'show', text: fmt('learn_comp_show', q.a, opSign, q.b, q.a, roundTo) },
-      { action: 'calc', text: fmt('learn_comp_calc', roundTo, opSign, q.b, roundResult) },
-      { action: 'adjust', text: fmt('learn_comp_adjust', sp('加','added'), diff, sp('减','subtract')) },
-      { action: 'done', text: fmt('learn_comp_done', q.a, opSign, q.b, q.answer) }
+      { action: 'show', text: sp(`${q.a}${opSign}${q.b}，把${q.a}看成${roundTo}！`, `${q.a}${opSign}${q.b}, think of ${q.a} as ${roundTo}!`) },
+      { action: 'calc', text: sp(`先算${roundTo}${opSign}${q.b}=${roundResult}！`, `First: ${roundTo}${opSign}${q.b}=${roundResult}!`) },
+      { action: 'adjust', text: sp(`多加了${diff}，所以要减回${diff}！`, `We added ${diff} extra, so subtract ${diff} back!`) },
+      { action: 'done', text: sp(`所以${q.a}${opSign}${q.b}=${q.answer}！`, `So ${q.a}${opSign}${q.b}=${q.answer}!`) }
     ];
 
     let si = 0;
@@ -2080,7 +2080,11 @@ const Learn = (() => {
     vis.innerHTML = `<div class="split-visual"><div class="split-steps">
       <div class="split-step">${q.a} ≈ ${roundTo}</div>
     </div></div>`;
-    exp.textContent = fmt('learn_comp_question', q.a, roundTo, q.b, q.op);
+    // Construct directly to avoid template substitution issues
+    exp.textContent = sp(
+      `把${q.a}看成${roundTo}，先算${roundTo}${q.op}${q.b}=?`,
+      `Think of ${q.a} as ${roundTo}, what is ${roundTo}${q.op}${q.b}?`
+    );
     currentSpeechText = exp.textContent;
     Speech.speak(currentSpeechText, 0.85);
 
