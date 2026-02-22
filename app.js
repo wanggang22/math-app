@@ -32,18 +32,33 @@ const I18N = {
     practice_start: '毛毛来练习吧！',
     challenge_start: '毛毛来闯关！',
     // 教学方法名称
-    learn_method_bonds: '10的好朋友', learn_method_finger: '数手指',
+    learn_method_number_sense: '认识数字', learn_method_bonds: '10的好朋友', learn_method_finger: '数手指',
     learn_method_doubles: '双双好朋友', learn_method_make_ten: '凑十法',
-    learn_method_break_ten: '破十法', learn_method_split: '拆分法',
-    learn_method_mental: '巧算法',
+    learn_method_break_ten: '破十法', learn_method_compensation: '凑整法',
+    learn_method_split: '拆分法', learn_method_mental: '巧算法',
     // 教学介绍
+    learn_intro_number_sense: '毛毛，我们来认识数字！看一看，数一数！',
     learn_intro_bonds: '毛毛，我们来认识10的好朋友！哪两个数加起来等于10？',
     learn_intro_finger: '毛毛，我们来用手指数数！',
     learn_intro_doubles: '毛毛，我们来学双双好朋友！两个一样的数相加！',
     learn_intro_make_ten: '毛毛，我们来学凑十法！凑成10，算得快！',
     learn_intro_break_ten: '毛毛，我们来学破十法！从10里拿走，算得快！',
+    learn_intro_compensation: '毛毛，我们来学凑整法！把数凑成整十，算得更快！',
     learn_intro_split: '毛毛，我们来学拆分法！先算整十，再算零头！',
     learn_intro_mental: '毛毛，我们来学巧算法！把数拆开算更快！',
+    // 认识数字
+    learn_ns_count: '毛毛来数一数，这里有{0}个！',
+    learn_ns_tenframe: '毛毛看！十格框里有{0}个金币！',
+    learn_ns_compare: '哪个数更大？{0} 还是 {1}？',
+    learn_ns_compare_result: '{0}比{1}大！{0} > {1}！',
+    learn_ns_numberline: '毛毛看！{0}在数字线上的位置！',
+    learn_ns_order: '毛毛来把数字从小到大排一排！',
+    // 凑整法
+    learn_comp_show: '{0}{1}{2}，把{3}看成{4}！',
+    learn_comp_calc: '先算{0}{1}{2}={3}！',
+    learn_comp_adjust: '多{0}了{1}，所以要{2}回{1}！',
+    learn_comp_done: '所以{0}{1}{2}={3}！',
+    learn_comp_question: '把{0}看成{1}，先算{2}{3}{1}=?',
     // 10的好朋友
     learn_bonds_song: '1和9，2和8，3和7，4和6，5和5，凑成10顶呱呱！',
     learn_bonds_pair: '{0}和{1}是好朋友，{0}+{1}=10！',
@@ -97,15 +112,61 @@ const I18N = {
     learn_tap_continue: '点一下继续',
     learn_your_turn: '毛毛来试试！',
     learn_levels: [
-      '💛 10的好朋友', '🍄 10以内加法', '🍄 10以内减法', '🌟 双双好朋友',
-      '⭐ 20以内加法', '⭐ 20以内减法', '🔥 50以内加减法', '👑 100以内加减法'
+      '🔢 认识数字', '💛 10的好朋友', '🍄 10以内加法', '🍄 10以内减法', '🌟 双双好朋友',
+      '⭐ 凑十法', '⭐ 破十法', '💫 凑整法', '🔥 拆分法', '👑 巧算法'
     ],
     home_greetings: ['毛毛今天也要加油哦！💪', '毛毛最棒了！🌟', '毛毛准备好了吗？🍄', '毛毛来挑战吧！🏰', '毛毛是数学小天才！👑'],
     challenge_names: [
       'W1-1 草原', 'W1-2 地下', 'W2-1 沙漠', 'W2-2 绿洲',
       '🔥 W3 库巴城堡', 'W4-1 冰雪', 'W4-2 海洋', 'W5-1 天空',
       'W5-2 星空', '🔥 W6 最终城堡'
-    ]
+    ],
+    // 故事题
+    story_mode: '故事题',
+    story_templates: [
+      '毛毛有{0}个苹果，妈妈又给了{1}个，毛毛现在有几个苹果？',
+      '花园里有{0}朵红花和{1}朵黄花，一共有几朵花？',
+      '鱼缸里有{0}条鱼，爸爸又买了{1}条，现在有几条鱼？',
+      '毛毛有{0}块饼干，吃掉了{1}块，还剩几块？',
+      '树上有{0}只小鸟，飞走了{1}只，还剩几只？',
+      '毛毛有{0}个玩具，送给小朋友{1}个，还剩几个？'
+    ],
+    // 估算
+    estimation: '估算',
+    estimation_closer: '答案更接近哪个？',
+    // 题数选择
+    select_count: '选择题数',
+    // 渐进提示 (成长型思维)
+    wrong_growth: ['加油！错误是学习的好机会！', '没关系，每次尝试都在进步！', '毛毛别灰心，我们一起想想！', '有趣的想法！来验证一下！', '快对了！再试一次！'],
+    hint_try_fingers: '💡 试试用手指数一数！',
+    hint_try_method: '💡 提示：试试用{0}！',
+    hint_show_answer: '💡 答案是{0}！让我们来看看：{1}{2}{3}={0}',
+    hint_almost: '💡 快对了！答案比{0}{1}一点点',
+    hint_bigger: '大', hint_smaller: '小',
+    // 时间奖励
+    time_bonus: '⏰ +5秒！',
+    // 成就系统
+    achievements_title: '🏆 成就',
+    new_achievement: '🏆 新成就解锁！',
+    achievement_first_star: '初露锋芒', achievement_first_star_desc: '第一次获得星星',
+    achievement_perfect: '完美练习', achievement_perfect_desc: '练习获得满分',
+    achievement_streak_5: '五连胜', achievement_streak_5_desc: '连续答对5题',
+    achievement_streak_10: '十连胜', achievement_streak_10_desc: '连续答对10题',
+    achievement_learn_all: '学霸毛毛', achievement_learn_all_desc: '完成所有学习关卡',
+    achievement_challenge_5: '小冒险家', achievement_challenge_5_desc: '通过5个闯关关卡',
+    achievement_practice_50: '练习达人', achievement_practice_50_desc: '完成50道练习题',
+    achievement_daily_3: '坚持不懈', achievement_daily_3_desc: '连续3天练习',
+    // 家长面板
+    parent_title: '📊 家长面板',
+    parent_password: '请输入密码(1234)',
+    parent_total_practice: '总练习题数',
+    parent_total_correct: '总答对题数',
+    parent_accuracy: '正确率',
+    parent_weak: '需要加强',
+    parent_strong: '掌握良好',
+    parent_recent: '最近练习',
+    parent_streak: '连续天数',
+    parent_no_data: '还没有练习数据哦'
   },
   en: {
     back: 'Back', prev: 'Prev', next: 'Next',
@@ -134,17 +195,30 @@ const I18N = {
     learn_start: "Maomao, let's learn!",
     practice_start: "Maomao, let's practice!",
     challenge_start: "Maomao, let's go!",
-    learn_method_bonds: 'Friends of 10', learn_method_finger: 'Fingers',
+    learn_method_number_sense: 'Numbers', learn_method_bonds: 'Friends of 10', learn_method_finger: 'Fingers',
     learn_method_doubles: 'Doubles', learn_method_make_ten: 'Make 10',
-    learn_method_break_ten: 'Break 10', learn_method_split: 'Split',
-    learn_method_mental: 'Smart Math',
+    learn_method_break_ten: 'Break 10', learn_method_compensation: 'Round Up',
+    learn_method_split: 'Split', learn_method_mental: 'Smart Math',
+    learn_intro_number_sense: "Maomao, let's learn numbers! Look and count!",
     learn_intro_bonds: "Maomao, let's meet Friends of 10! Which two numbers add up to 10?",
     learn_intro_finger: "Maomao, let's count with our fingers!",
     learn_intro_doubles: "Maomao, let's learn Doubles! Two same numbers added together!",
     learn_intro_make_ten: "Maomao, let's learn Make Ten! Make 10 first, calculate fast!",
     learn_intro_break_ten: "Maomao, let's learn Break Ten! Take from 10, super easy!",
+    learn_intro_compensation: "Maomao, let's learn Round Up! Round to 10, then adjust!",
     learn_intro_split: "Maomao, let's learn Split! Do the tens first, then the ones!",
     learn_intro_mental: "Maomao, let's learn Smart Math! Split numbers to make it easy!",
+    learn_ns_count: 'Maomao, count! There are {0}!',
+    learn_ns_tenframe: 'Look! {0} coins in the ten frame!',
+    learn_ns_compare: 'Which is bigger? {0} or {1}?',
+    learn_ns_compare_result: '{0} is bigger! {0} > {1}!',
+    learn_ns_numberline: 'Look! {0} is here on the number line!',
+    learn_ns_order: 'Maomao, put the numbers in order!',
+    learn_comp_show: '{0}{1}{2}, think of {3} as {4}!',
+    learn_comp_calc: 'First: {0}{1}{2}={3}!',
+    learn_comp_adjust: 'We added {1} extra, so subtract {1} back!',
+    learn_comp_done: 'So {0}{1}{2}={3}!',
+    learn_comp_question: 'Think of {0} as {1}, what is {2}{3}{1}?',
     learn_bonds_song: '1 and 9, 2 and 8, 3 and 7, 4 and 6, 5 and 5, they all make 10!',
     learn_bonds_pair: '{0} and {1} are friends! {0}+{1}=10!',
     learn_bonds_question: "Who is {0}'s friend? {0}+?=10",
@@ -191,15 +265,54 @@ const I18N = {
     learn_tap_continue: 'Tap!',
     learn_your_turn: "Maomao's turn!",
     learn_levels: [
-      '💛 Friends of 10', '🍄 Add ≤10', '🍄 Sub ≤10', '🌟 Doubles',
-      '⭐ Add ≤20', '⭐ Sub ≤20', '🔥 Add & Sub ≤50', '👑 Add & Sub ≤100'
+      '🔢 Numbers', '💛 Friends of 10', '🍄 Add ≤10', '🍄 Sub ≤10', '🌟 Doubles',
+      '⭐ Make 10', '⭐ Break 10', '💫 Round Up', '🔥 Split', '👑 Smart Math'
     ],
     home_greetings: ["Let's go Maomao! 💪", 'Maomao is the best! 🌟', 'Ready Maomao? 🍄', "Maomao's adventure! 🏰", 'Math genius Maomao! 👑'],
     challenge_names: [
       'W1-1 Plains', 'W1-2 Underground', 'W2-1 Desert', 'W2-2 Oasis',
       '🔥 W3 Castle', 'W4-1 Ice', 'W4-2 Ocean', 'W5-1 Sky',
       'W5-2 Stars', '🔥 W6 Final Castle'
-    ]
+    ],
+    story_mode: 'Story',
+    story_templates: [
+      'Maomao has {0} apples. Mom gives {1} more. How many apples now?',
+      'There are {0} red flowers and {1} yellow flowers. How many total?',
+      'The tank has {0} fish. Dad buys {1} more. How many fish now?',
+      'Maomao has {0} cookies. Eats {1}. How many left?',
+      'There are {0} birds. {1} fly away. How many left?',
+      'Maomao has {0} toys. Gives {1} away. How many left?'
+    ],
+    estimation: 'Estimate',
+    estimation_closer: 'Which is closer?',
+    select_count: 'Questions',
+    wrong_growth: ["Great try! Mistakes help us learn!", "No worries! Every try makes you better!", "Don't give up Maomao! Let's think together!", "Interesting idea! Let's check!", "Almost! Try once more!"],
+    hint_try_fingers: '💡 Try counting with fingers!',
+    hint_try_method: '💡 Hint: Try {0}!',
+    hint_show_answer: '💡 The answer is {0}! Look: {1}{2}{3}={0}',
+    hint_almost: '💡 Almost! The answer is a little {1} than {0}',
+    hint_bigger: 'bigger', hint_smaller: 'smaller',
+    time_bonus: '⏰ +5s!',
+    achievements_title: '🏆 Badges',
+    new_achievement: '🏆 New badge unlocked!',
+    achievement_first_star: 'First Star', achievement_first_star_desc: 'Earn your first star',
+    achievement_perfect: 'Perfect!', achievement_perfect_desc: 'Get a perfect practice score',
+    achievement_streak_5: '5 in a Row', achievement_streak_5_desc: 'Answer 5 questions correctly in a row',
+    achievement_streak_10: '10 in a Row', achievement_streak_10_desc: 'Answer 10 questions correctly in a row',
+    achievement_learn_all: 'Scholar', achievement_learn_all_desc: 'Complete all learning levels',
+    achievement_challenge_5: 'Adventurer', achievement_challenge_5_desc: 'Clear 5 challenge levels',
+    achievement_practice_50: 'Practice Pro', achievement_practice_50_desc: 'Complete 50 practice questions',
+    achievement_daily_3: 'Dedicated', achievement_daily_3_desc: 'Practice 3 days in a row',
+    parent_title: '📊 Dashboard',
+    parent_password: 'Enter password (1234)',
+    parent_total_practice: 'Total Questions',
+    parent_total_correct: 'Total Correct',
+    parent_accuracy: 'Accuracy',
+    parent_weak: 'Needs Work',
+    parent_strong: 'Mastered',
+    parent_recent: 'Recent',
+    parent_streak: 'Day Streak',
+    parent_no_data: 'No practice data yet'
   }
 };
 
@@ -644,23 +757,45 @@ const Store = {
 };
 
 // ===== 出题引擎 =====
-function generateQuestion(maxNum, type) {
+function generateQuestion(maxNum, type, history) {
   let a, b, op;
-  if (type === 'add') op = '+';
-  else if (type === 'sub') op = '-';
-  else op = Math.random() < 0.5 ? '+' : '-';
+  // 防重复：最多尝试20次
+  for (let attempt = 0; attempt < 20; attempt++) {
+    if (type === 'add') op = '+';
+    else if (type === 'sub') op = '-';
+    else op = Math.random() < 0.5 ? '+' : '-';
 
-  if (op === '+') {
-    a = Math.floor(Math.random() * maxNum) + 1;
-    b = Math.floor(Math.random() * (maxNum - a)) + 1;
-    if (a + b > maxNum) b = maxNum - a;
-    if (b < 0) b = 0;
-  } else {
-    a = Math.floor(Math.random() * (maxNum - 1)) + 2;
-    b = Math.floor(Math.random() * a) + 1;
-    if (b > a) b = a;
+    if (op === '+') {
+      a = Math.floor(Math.random() * maxNum) + 1;
+      b = Math.floor(Math.random() * (maxNum - a)) + 1;
+      if (a + b > maxNum) b = maxNum - a;
+      if (b < 0) b = 0;
+    } else {
+      a = Math.floor(Math.random() * (maxNum - 1)) + 2;
+      b = Math.floor(Math.random() * a) + 1;
+      if (b > a) b = a;
+    }
+    // 检查是否重复
+    const key = `${a}${op}${b}`;
+    if (!history || !history.has(key)) {
+      if (history) history.add(key);
+      break;
+    }
   }
   return { a, b, op, answer: op === '+' ? a + b : a - b };
+}
+
+// ===== 故事题引擎 =====
+function generateStoryQuestion(maxNum, type, lang) {
+  const q = generateQuestion(maxNum, type);
+  const templates = I18N[lang || 'zh'].story_templates;
+  // 加法故事模板: 前3个; 减法故事模板: 后3个
+  const isAdd = q.op === '+';
+  const pool = isAdd ? templates.slice(0, 3) : templates.slice(3, 6);
+  let story = pool[Math.floor(Math.random() * pool.length)];
+  story = story.replace('{0}', q.a).replace('{1}', q.b);
+  q.story = story;
+  return q;
 }
 
 // ===== 创建数字键盘 =====
@@ -796,10 +931,12 @@ const App = {
     document.getElementById('page-' + page).classList.add('active');
     this.currentPage = page;
 
-    if (page === 'home') this.updateHomeStats();
+    if (page === 'home') { this.updateHomeStats(); if (typeof Achievements !== 'undefined') Achievements.render('home-achievements'); }
     if (page === 'learn') { Learn.init(); this.toast(this.t('learn_start')); }
     if (page === 'practice') { Practice.init(); this.toast(this.t('practice_start')); }
     if (page === 'challenge') { Challenge.init(); this.toast(this.t('challenge_start')); }
+    if (page === 'achievements') { Achievements.render('achievements-grid'); }
+    if (page === 'parent') { ParentDashboard.render(); }
   },
 
   updateHomeStats() {
@@ -883,7 +1020,10 @@ const App = {
 // ===== 学习模式 =====
 const Learn = (() => {
   // 优化后的级别定义（基于人教版+新加坡数学+CPA框架研究）
+  // 新顺序: 认识数字→10的好朋友→10以内加法→10以内减法→双双好朋友→凑十法→破十法→凑整法→拆分法→巧算法
   const LEVELS = [
+    { max: 10, op: '+', method: 'number_sense',
+      steps: ['intro','guided','guided','guided','interactive','interactive','quiz_solo','quiz_solo'] },
     { max: 10, op: '+', method: 'bonds',
       steps: ['intro','guided','guided','guided','interactive','interactive','interactive','quiz_solo','quiz_solo'] },
     { max: 10, op: '+', method: 'finger',
@@ -896,6 +1036,8 @@ const Learn = (() => {
       steps: ['intro','guided','guided','interactive','interactive','quiz_assisted','quiz_assisted','quiz_solo','quiz_solo'] },
     { max: 20, op: '-', method: 'break_ten',
       steps: ['intro','guided','guided','interactive','interactive','quiz_assisted','quiz_assisted','quiz_solo','quiz_solo'] },
+    { max: 20, op: '+', method: 'compensation',
+      steps: ['intro','guided','guided','interactive','interactive','quiz_assisted','quiz_solo','quiz_solo'] },
     { max: 50, op: 'mix', method: 'split',
       steps: ['intro','guided','guided','guided','interactive','interactive','quiz_assisted','quiz_solo','quiz_solo'] },
     { max: 100, op: 'mix', method: 'mental',
@@ -1030,13 +1172,30 @@ const Learn = (() => {
     }
   }
 
+  // --- 认识数字出题 ---
+  function genNumberSenseQ(difficulty) {
+    // 返回数字感知题：数数、比较
+    const num = Math.min(10, Math.max(1, difficulty + 1));
+    return { a: num, b: 0, op: '+', answer: num, nsType: difficulty < 4 ? 'count' : 'compare' };
+  }
+  // --- 凑整法出题 ---
+  function genCompensationQ(difficulty) {
+    // e.g. 9+6: think 10+6-1=15; 8+7: think 10+7-2=15
+    const combos = [[9,4],[9,6],[8,5],[8,7],[9,8],[19,6],[18,7],[29,5],[28,6],[9,3]];
+    const idx = difficulty < combos.length ? difficulty : Math.floor(Math.random() * combos.length);
+    const [a, b] = combos[idx];
+    return { a, b, op: '+', answer: a + b, roundTo: Math.ceil(a / 10) * 10, diff: Math.ceil(a / 10) * 10 - a };
+  }
+
   function genQuestion(lv, difficulty) {
     switch (lv.method) {
+      case 'number_sense': return genNumberSenseQ(difficulty);
       case 'bonds': return genBondsQ(difficulty);
       case 'finger': return genFingerQ(lv.op, difficulty);
       case 'doubles': return genDoublesQ(difficulty);
       case 'make_ten': return genMakeTenQ(difficulty);
       case 'break_ten': return genBreakTenQ(difficulty);
+      case 'compensation': return genCompensationQ(difficulty);
       case 'split': return genSplitQ(difficulty);
       case 'mental': return genMentalQ(difficulty);
     }
@@ -1129,8 +1288,13 @@ const Learn = (() => {
       quizQ = genQuestion(lv, 5);
       renderQuizAssisted(lv, quizQ);
     } else if (stepType === 'quiz_solo') {
-      if (lv.method === 'bonds') {
+      if (lv.method === 'number_sense') {
+        // 认识数字的测验：简单加法 ≤10
+        quizQ = generateQuestion(10, 'add');
+      } else if (lv.method === 'bonds') {
         quizQ = genBondsQ(Math.floor(Math.random() * BONDS_PAIRS.length));
+      } else if (lv.method === 'compensation') {
+        quizQ = genCompensationQ(Math.floor(Math.random() * 5));
       } else if (lv.op === 'mix') {
         const type = Math.random() < 0.5 ? 'add' : 'sub';
         quizQ = generateQuestion(lv.max, type);
@@ -1151,7 +1315,7 @@ const Learn = (() => {
     const introKey = 'learn_intro_' + lv.method;
     exp.textContent = t(introKey);
 
-    const icons = { bonds: '💛🔟', finger: '🖐️✋', doubles: '🌟🌟', make_ten: '🪙➡️🔟', break_ten: '🔟➡️🪙', split: '✂️🔢', mental: '🧠💡' };
+    const icons = { number_sense: '🔢🔟', bonds: '💛🔟', finger: '🖐️✋', doubles: '🌟🌟', make_ten: '🪙➡️🔟', break_ten: '🔟➡️🪙', compensation: '💫🔟', split: '✂️🔢', mental: '🧠💡' };
     vis.innerHTML = `<div class="intro-icon">${icons[lv.method] || '📖'}</div>
       <div class="intro-title">${t('learn_method_' + lv.method)}</div>`;
 
@@ -1163,14 +1327,147 @@ const Learn = (() => {
   // ========== GUIDED (引导教学) ==========
   function renderGuided(lv, q) {
     switch (lv.method) {
+      case 'number_sense': renderNumberSenseGuided(q); break;
       case 'bonds': renderBondsGuided(q); break;
       case 'finger': renderFingerGuided(q); break;
       case 'doubles': renderDoublesGuided(q); break;
       case 'make_ten': renderMakeTenGuided(q); break;
       case 'break_ten': renderBreakTenGuided(q); break;
+      case 'compensation': renderCompensationGuided(q); break;
       case 'split': renderSplitGuided(q); break;
       case 'mental': renderMentalGuided(q); break;
     }
+  }
+
+  // --- 十格框可视化 ---
+  function buildTenFrame(count) {
+    let html = '<div class="ten-frame">';
+    for (let r = 0; r < 2; r++) {
+      html += '<div class="ten-frame-row">';
+      for (let c = 0; c < 5; c++) {
+        const idx = r * 5 + c;
+        const filled = idx < count;
+        html += `<div class="ten-frame-cell${filled ? ' filled' : ''}" style="animation-delay:${idx * 0.08}s">${filled ? '<div class="pixel-block gold"></div>' : ''}</div>`;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  // --- 数字线可视化 ---
+  function buildNumberLine(highlight, max = 10) {
+    let html = '<div class="number-line">';
+    html += '<div class="number-line-track">';
+    for (let i = 0; i <= max; i++) {
+      const active = i === highlight;
+      html += `<div class="number-line-point${active ? ' active' : ''}"><span class="number-line-tick"></span><span class="number-line-label">${i}</span></div>`;
+    }
+    html += '</div></div>';
+    return html;
+  }
+
+  // --- 认识数字引导 ---
+  function renderNumberSenseGuided(q) {
+    const vis = document.getElementById('learn-visual');
+    const eq = document.getElementById('learn-equation');
+    const exp = document.getElementById('learn-explanation');
+    vis.style.display = 'flex'; eq.style.display = 'none'; exp.style.display = 'block';
+
+    const num = q.a;
+    if (q.nsType === 'compare' || num > 5) {
+      // 用十格框展示
+      const subSteps = [
+        { action: 'tenframe', text: fmt('learn_ns_tenframe', num) },
+        { action: 'numberline', text: fmt('learn_ns_numberline', num) },
+        { action: 'done', text: fmt('learn_ns_count', num) }
+      ];
+      let si = 0;
+      function renderSub() {
+        const s = subSteps[si];
+        exp.textContent = s.text; currentSpeechText = s.text;
+        Speech.speak(s.text, 0.85);
+        if (s.action === 'tenframe') {
+          vis.innerHTML = buildTenFrame(num);
+        } else if (s.action === 'numberline') {
+          vis.innerHTML = buildNumberLine(num);
+        } else {
+          vis.innerHTML = buildTenFrame(num);
+          Sound.correct();
+        }
+        if (si < subSteps.length - 1) { showTapContinue(() => { si++; renderSub(); }); }
+        else { showTapContinue(); }
+      }
+      renderSub();
+    } else {
+      // 简单数数
+      vis.innerHTML = '<div class="coin-stage"><div class="coin-group">';
+      for (let i = 0; i < num; i++) vis.innerHTML += '';
+      let dotsHtml = '';
+      for (let i = 0; i < num; i++) dotsHtml += `<div class="pixel-block gold" style="animation-delay:${i * 0.15}s"></div>`;
+      vis.innerHTML = `<div class="coin-stage"><div class="coin-group">${dotsHtml}</div></div>`;
+      exp.textContent = fmt('learn_ns_count', num);
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+      showTapContinue();
+    }
+  }
+
+  // --- 凑整法引导 ---
+  function renderCompensationGuided(q) {
+    const vis = document.getElementById('learn-visual');
+    const eq = document.getElementById('learn-equation');
+    const exp = document.getElementById('learn-explanation');
+    vis.style.display = 'flex'; eq.style.display = 'block'; exp.style.display = 'block';
+
+    const roundTo = q.roundTo; // e.g. 10 for 9+6
+    const diff = q.diff;       // e.g. 1 for 9→10
+    const roundResult = roundTo + q.b; // 10+6=16
+    const opSign = q.op;
+
+    eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+
+    const subSteps = [
+      { action: 'show', text: fmt('learn_comp_show', q.a, opSign, q.b, q.a, roundTo) },
+      { action: 'calc', text: fmt('learn_comp_calc', roundTo, opSign, q.b, roundResult) },
+      { action: 'adjust', text: fmt('learn_comp_adjust', sp('加','added'), diff, sp('减','subtract')) },
+      { action: 'done', text: fmt('learn_comp_done', q.a, opSign, q.b, q.answer) }
+    ];
+
+    let si = 0;
+    function renderSub() {
+      const s = subSteps[si];
+      exp.textContent = s.text; currentSpeechText = s.text;
+      Speech.speak(s.text, 0.85);
+      if (s.action === 'show') {
+        vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+          <div class="split-step active">${q.a} ≈ <b>${roundTo}</b> <span style="color:var(--coin-gold)">(+${diff})</span></div>
+        </div></div>`;
+      } else if (s.action === 'calc') {
+        eq.innerHTML = `<span class="highlight-gold">${roundTo}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="highlight-gold">${roundResult}</span>`;
+        vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+          <div class="split-step done">${q.a} ≈ ${roundTo}</div>
+          <div class="split-step active">${roundTo} ${opSign} ${q.b} = <b>${roundResult}</b></div>
+        </div></div>`;
+      } else if (s.action === 'adjust') {
+        eq.innerHTML = `<span>${roundResult}</span> <span class="op">-</span> <span class="highlight-red">${diff}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+        vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+          <div class="split-step done">${roundTo} ${opSign} ${q.b} = ${roundResult}</div>
+          <div class="split-step active">${roundResult} - <b>${diff}</b> = ?</div>
+        </div></div>`;
+      } else {
+        eq.innerHTML = `<span>${q.a}</span> <span class="op">${opSign}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="highlight-green">${q.answer}</span>`;
+        vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+          <div class="split-step done">${roundTo} ${opSign} ${q.b} = ${roundResult}</div>
+          <div class="split-step done">${roundResult} - ${diff} = ${q.answer}</div>
+          <div class="split-step active">✨ ${q.a} ${opSign} ${q.b} = <b>${q.answer}</b></div>
+        </div></div>`;
+        Sound.correct();
+      }
+      if (si < subSteps.length - 1) { showTapContinue(() => { si++; renderSub(); }); }
+      else { showTapContinue(); }
+    }
+    renderSub();
   }
 
   // --- 10的好朋友引导 ---
@@ -1708,14 +2005,105 @@ const Learn = (() => {
   // ========== INTERACTIVE ==========
   function renderInteractive(lv, q) {
     switch (lv.method) {
+      case 'number_sense': renderNumberSenseInteractive(q); break;
       case 'bonds': renderBondsInteractive(q); break;
       case 'finger': renderFingerInteractive(q); break;
       case 'doubles': renderDoublesInteractive(q); break;
       case 'make_ten': renderMakeTenInteractive(q); break;
       case 'break_ten': renderBreakTenInteractive(q); break;
+      case 'compensation': renderCompensationInteractive(q); break;
       case 'split': renderSplitInteractive(q); break;
       case 'mental': renderMentalInteractive(q); break;
     }
+  }
+
+  // --- 认识数字互动 ---
+  function renderNumberSenseInteractive(q) {
+    const vis = document.getElementById('learn-visual');
+    const eq = document.getElementById('learn-equation');
+    const exp = document.getElementById('learn-explanation');
+    vis.style.display = 'flex'; eq.style.display = 'none'; exp.style.display = 'block';
+
+    if (q.nsType === 'compare') {
+      // 比较大小
+      const a = q.a;
+      const b = Math.max(1, a - Math.floor(Math.random() * 3) - 1);
+      const bigger = Math.max(a, b);
+      exp.textContent = fmt('learn_ns_compare', a, b);
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+      vis.innerHTML = `<div class="bonds-visual">
+        <div class="bonds-group"><div class="bonds-label">${a}</div><div class="bonds-dots">${buildDots(a, 'blue')}</div></div>
+        <span class="visual-separator">VS</span>
+        <div class="bonds-group"><div class="bonds-label">${b}</div><div class="bonds-dots">${buildDots(b, 'red')}</div></div>
+      </div>`;
+      showChoices([a, b], bigger, () => {
+        exp.textContent = fmt('learn_ns_compare_result', bigger, Math.min(a, b));
+        Sound.correct();
+        Speech.speak(sp(`${bigger}比较大！毛毛太棒了！`, `${bigger} is bigger! Great job Maomao!`), 0.85);
+        showTapContinue();
+      });
+    } else {
+      // 数数：十格框，问有几个
+      vis.innerHTML = buildTenFrame(q.a);
+      exp.textContent = sp('十格框里有几个金币？', 'How many coins in the ten frame?');
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+      const w1 = Math.min(10, q.a + 1), w2 = Math.max(1, q.a - 1);
+      showChoices([q.a, w1, w2], q.a, () => {
+        exp.textContent = fmt('learn_ns_tenframe', q.a);
+        Sound.correct();
+        Speech.speak(sp(`对了！有${q.a}个！毛毛太棒了！`, `Correct! There are ${q.a}! Great job Maomao!`), 0.85);
+        showTapContinue();
+      });
+    }
+  }
+
+  function buildDots(count, cls) {
+    let html = '';
+    for (let i = 0; i < count; i++) html += `<div class="pixel-block ${cls}"></div>`;
+    return html;
+  }
+
+  // --- 凑整法互动 ---
+  function renderCompensationInteractive(q) {
+    const exp = document.getElementById('learn-explanation');
+    const eq = document.getElementById('learn-equation');
+    const vis = document.getElementById('learn-visual');
+    vis.style.display = 'flex'; eq.style.display = 'block'; exp.style.display = 'block';
+
+    const roundTo = q.roundTo;
+    const diff = q.diff;
+    const roundResult = roundTo + q.b;
+
+    eq.innerHTML = `<span>${q.a}</span> <span class="op">${q.op}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+    vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+      <div class="split-step">${q.a} ≈ ${roundTo}</div>
+    </div></div>`;
+    exp.textContent = fmt('learn_comp_question', q.a, roundTo, roundTo, q.op);
+    currentSpeechText = exp.textContent;
+    Speech.speak(currentSpeechText, 0.85);
+
+    const w1 = roundResult + 2, w2 = Math.max(0, roundResult - 2);
+    showChoices([roundResult, w1, w2], roundResult, () => {
+      exp.textContent = sp(`好！${roundResult}减回${diff}等于几？`, `Good! ${roundResult} minus ${diff} equals?`);
+      currentSpeechText = exp.textContent;
+      Speech.speak(currentSpeechText, 0.85);
+      const w3 = q.answer + 1, w4 = Math.max(0, q.answer - 1);
+      showChoices([q.answer, w3, w4], q.answer, () => {
+        const blank = document.querySelector('#learn-equation .blank');
+        if (blank) { blank.textContent = q.answer; blank.style.color = 'var(--success)'; }
+        exp.textContent = fmt('learn_comp_done', q.a, q.op, q.b, q.answer);
+        vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+          <div class="split-step done">${roundTo} ${q.op} ${q.b} = ${roundResult}</div>
+          <div class="split-step done">${roundResult} - ${diff} = ${q.answer}</div>
+          <div class="split-step active">✨ ${q.a} ${q.op} ${q.b} = <b>${q.answer}</b></div>
+        </div></div>`;
+        Sound.correct();
+        Speech.speak(sp(`${q.answer}！毛毛太棒了！`, `${q.answer}! Great job Maomao!`), 0.85);
+        showTapContinue();
+      });
+    });
   }
 
   function renderBondsInteractive(q) {
@@ -2019,6 +2407,10 @@ const Learn = (() => {
         Array(10).fill('<div class="pixel-block blue"></div>').join('') +
         '</div><span class="visual-separator">+</span><div class="coin-group">' +
         Array(ones).fill('<div class="pixel-block gold"></div>').join('') + '</div></div>';
+    } else if (lv.method === 'compensation') {
+      vis.innerHTML = `<div class="split-visual"><div class="split-steps">
+        <div class="split-step">${q.a} ≈ ${q.roundTo} (${q.op === '+' ? '+' : '-'}${q.diff})</div>
+      </div></div>`;
     } else if (lv.method === 'split' || lv.method === 'mental') {
       const bTens = Math.floor(q.b / 10) * 10;
       const bOnes = q.b % 10;
@@ -2127,6 +2519,8 @@ const Learn = (() => {
     Sound.levelUp(); FX.confetti();
     App.toast(t('level_complete'));
     Speech.speak(sp('毛毛通关啦！太厉害了！', 'Maomao cleared it! Amazing!'), 0.85);
+    // 成就检查
+    if (typeof Achievements !== 'undefined') Achievements.check('learn_complete');
     setTimeout(() => init(), 2000);
   }
 
@@ -2144,10 +2538,13 @@ const Learn = (() => {
 
 // ===== 练习模式 =====
 const Practice = (() => {
-  let range = 10, type = 'add';
+  let range = 10, type = 'add', questionCount = 10, storyMode = false;
   let questions = [], current = 0, score = 0, wrongList = [];
   let numpad = null;
   let locked = false;
+  let wrongAttempts = 0; // 当前题错误次数（渐进提示用）
+  let streak = 0; // 连续正确数
+  let questionHistory = new Set(); // 防重复
 
   function init() {
     showSetup();
@@ -2171,6 +2568,24 @@ const Practice = (() => {
         type = btn.dataset.type;
       };
     });
+    // 题数选择
+    document.querySelectorAll('#count-options .setup-opt').forEach(btn => {
+      btn.onclick = () => {
+        Sound.click();
+        document.querySelectorAll('#count-options .setup-opt').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        questionCount = parseInt(btn.dataset.count);
+      };
+    });
+    // 故事模式
+    const storyBtn = document.getElementById('btn-story-mode');
+    if (storyBtn) {
+      storyBtn.onclick = () => {
+        Sound.click();
+        storyMode = !storyMode;
+        storyBtn.classList.toggle('active', storyMode);
+      };
+    }
   }
 
   function showSetup() {
@@ -2186,8 +2601,14 @@ const Practice = (() => {
     score = 0;
     current = 0;
     locked = false;
-    for (let i = 0; i < 10; i++) {
-      questions.push(generateQuestion(range, type));
+    streak = 0;
+    questionHistory = new Set();
+    for (let i = 0; i < questionCount; i++) {
+      if (storyMode) {
+        questions.push(generateStoryQuestion(range, type, App.lang));
+      } else {
+        questions.push(generateQuestion(range, type, questionHistory));
+      }
     }
     document.getElementById('practice-setup').classList.add('hidden');
     document.getElementById('practice-game').classList.remove('hidden');
@@ -2199,11 +2620,18 @@ const Practice = (() => {
 
   function renderQuestion() {
     const q = questions[current];
-    document.getElementById('practice-equation').innerHTML =
-      `<span>${q.a}</span> <span class="op">${q.op}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
-    document.getElementById('practice-count').textContent = `${current + 1}/10`;
+    wrongAttempts = 0;
+    if (q.story) {
+      // 故事题模式
+      document.getElementById('practice-equation').innerHTML =
+        `<div class="story-text">${q.story}</div><div class="equation-display"><span class="blank">?</span></div>`;
+    } else {
+      document.getElementById('practice-equation').innerHTML =
+        `<span>${q.a}</span> <span class="op">${q.op}</span> <span>${q.b}</span> <span class="eq">=</span> <span class="blank">?</span>`;
+    }
+    document.getElementById('practice-count').textContent = `${current + 1}/${questionCount}`;
     document.getElementById('practice-score').textContent = `🪙 ${score}`;
-    document.getElementById('practice-progress').style.width = (current / 10 * 100) + '%';
+    document.getElementById('practice-progress').style.width = (current / questionCount * 100) + '%';
     document.getElementById('practice-feedback').innerHTML = '';
     locked = false;
     if (numpad) numpad.enable();
@@ -2211,7 +2639,28 @@ const Practice = (() => {
 
   function speakCurrent() {
     const q = questions[current];
-    if (q) Speech.speakEquation(q.a, q.op, q.b);
+    if (q) {
+      if (q.story) Speech.speak(q.story, 0.8);
+      else Speech.speakEquation(q.a, q.op, q.b);
+    }
+  }
+
+  // 获取渐进提示文本
+  function getProgressiveHint(q, attempts) {
+    if (attempts === 1) {
+      // 第1次错：成长型思维鼓励
+      const msgs = App.t('wrong_growth');
+      return msgs[Math.floor(Math.random() * msgs.length)];
+    } else if (attempts === 2) {
+      // 第2次错：给方法提示
+      if (range <= 10) return App.t('hint_try_fingers');
+      const method = range <= 20 ? (q.op === '+' ? App.t('learn_method_make_ten') : App.t('learn_method_break_ten')) : App.t('learn_method_split');
+      return App.t('hint_try_method').replace('{0}', method);
+    } else {
+      // 第3次错：显示答案
+      const dir = q.answer > (q.userAnswer || 0) ? App.t('hint_bigger') : App.t('hint_smaller');
+      return App.t('hint_show_answer').replace('{0}', q.answer).replace('{1}', q.a).replace('{2}', q.op).replace('{3}', q.b);
+    }
   }
 
   function submitAnswer(val) {
@@ -2222,6 +2671,7 @@ const Practice = (() => {
     if (val === q.answer) {
       locked = true;
       score++;
+      streak++;
       Sound.correct();
       FX.firework(window.innerWidth / 2, window.innerHeight / 4);
       const blankEl = document.querySelector('#practice-equation .blank');
@@ -2229,7 +2679,11 @@ const Practice = (() => {
       feedbackEl.innerHTML = `<span class="feedback-correct">${App.t('correct')}</span>`;
       document.getElementById('practice-score').textContent = `🪙 ${score}`;
       if (numpad) numpad.disable();
-      // 🔊 读出得到金币
+      // 成就检查
+      if (typeof Achievements !== 'undefined') {
+        Achievements.check('streak', streak);
+        if (score === questionCount && current === questionCount - 1) Achievements.check('perfect');
+      }
       const coinPhrases = App.lang === 'zh'
         ? ['毛毛太棒了！吃到金币！', '毛毛得到金币！', '毛毛好厉害！', '金币给毛毛！', '毛毛真棒！']
         : ['Awesome Maomao! Got a coin!', 'Maomao got a coin!', 'Great job Maomao!', 'Coin for Maomao!', 'Maomao is great!'];
@@ -2237,7 +2691,7 @@ const Practice = (() => {
 
       setTimeout(() => {
         current++;
-        if (current < 10) {
+        if (current < questionCount) {
           renderQuestion();
         } else {
           showResult();
@@ -2246,12 +2700,28 @@ const Practice = (() => {
     } else {
       Sound.wrong();
       if (numpad) numpad.clear();
-      wrongList.push({ ...q, userAnswer: val });
-      const msgs = App.t('encourage');
-      feedbackEl.innerHTML = `<span class="feedback-wrong">${App.t('wrong')}</span>`;
-      setTimeout(() => {
-        feedbackEl.innerHTML = `<span class="feedback-encourage">${msgs[Math.floor(Math.random() * msgs.length)]}</span>`;
-      }, 1000);
+      wrongAttempts++;
+      streak = 0;
+      q.userAnswer = val;
+      if (wrongAttempts === 1) wrongList.push({ ...q, userAnswer: val });
+
+      // 渐进提示
+      const hint = getProgressiveHint(q, wrongAttempts);
+      feedbackEl.innerHTML = `<span class="feedback-wrong">${hint}</span>`;
+
+      // 第3次错误后自动显示答案并跳过
+      if (wrongAttempts >= 3) {
+        locked = true;
+        if (numpad) numpad.disable();
+        const blankEl = document.querySelector('#practice-equation .blank');
+        if (blankEl) { blankEl.textContent = q.answer; blankEl.style.color = 'var(--coin-gold)'; blankEl.style.borderColor = 'var(--coin-gold)'; }
+        Speech.speakEquationWithAnswer(q.a, q.op, q.b, q.answer);
+        setTimeout(() => {
+          current++;
+          if (current < questionCount) renderQuestion();
+          else showResult();
+        }, 2500);
+      }
     }
   }
 
@@ -2259,21 +2729,21 @@ const Practice = (() => {
     document.getElementById('practice-game').classList.add('hidden');
     document.getElementById('practice-result').classList.remove('hidden');
 
+    const total = questionCount;
     let title, starsHtml;
     let speechText;
     const zh = App.lang === 'zh';
-    if (score === 10) { title = App.t('perfect'); starsHtml = '🌟🌟🌟'; FX.confetti(); Sound.oneUp(); speechText = zh ? '毛毛太厉害了！满分！三颗星！' : 'Maomao is amazing! Perfect score! Three stars!'; }
-    else if (score >= 8) { title = App.t('great'); starsHtml = '🌟🌟'; Sound.levelUp(); speechText = zh ? '毛毛真棒！两颗星！' : 'Super Maomao! Two stars! Great job!'; }
-    else if (score >= 5) { title = App.t('good'); starsHtml = '🌟'; speechText = zh ? '毛毛做得不错！一颗星！' : 'Good job Maomao! One star!'; }
+    const pct = score / total;
+    if (pct === 1) { title = App.t('perfect'); starsHtml = '🌟🌟🌟'; FX.confetti(); Sound.oneUp(); speechText = zh ? '毛毛太厉害了！满分！三颗星！' : 'Maomao is amazing! Perfect score! Three stars!'; }
+    else if (pct >= 0.8) { title = App.t('great'); starsHtml = '🌟🌟'; Sound.levelUp(); speechText = zh ? '毛毛真棒！两颗星！' : 'Super Maomao! Two stars! Great job!'; }
+    else if (pct >= 0.5) { title = App.t('good'); starsHtml = '🌟'; speechText = zh ? '毛毛做得不错！一颗星！' : 'Good job Maomao! One star!'; }
     else { title = App.t('try_harder'); starsHtml = ''; speechText = zh ? '毛毛加油！你可以的！' : 'Keep going Maomao! You can do it!'; }
 
     document.getElementById('result-title').textContent = title;
-    // 🔊 读出恭喜语
     setTimeout(() => Speech.speak(speechText, 0.85), 500);
     document.getElementById('result-stars').textContent = starsHtml;
-    document.getElementById('result-score').textContent = App.t('score_text').replace('{0}', score).replace('{1}', 10);
+    document.getElementById('result-score').textContent = App.t('score_text').replace('{0}', score).replace('{1}', total);
 
-    // Details
     const uniqueWrong = [];
     const seen = new Set();
     wrongList.forEach(w => {
@@ -2291,15 +2761,48 @@ const Practice = (() => {
       document.getElementById('btn-wrong-review').classList.add('hidden');
     }
 
-    // Save high score
+    // Save stats
     const highScore = Store.get('highScore', 0);
     if (score > highScore) Store.set('highScore', score);
+    // 练习追踪
+    const stats = Store.get('practiceStats', { total: 0, correct: 0, sessions: [], byRange: {} });
+    stats.total += total;
+    stats.correct += score;
+    const rangeKey = `${range}_${type}`;
+    if (!stats.byRange[rangeKey]) stats.byRange[rangeKey] = { total: 0, correct: 0 };
+    stats.byRange[rangeKey].total += total;
+    stats.byRange[rangeKey].correct += score;
+    stats.sessions.push({ date: new Date().toISOString().slice(0, 10), range, type, score, total });
+    if (stats.sessions.length > 50) stats.sessions = stats.sessions.slice(-50);
+    Store.set('practiceStats', stats);
+    // 每日连续
+    trackDailyStreak();
+    // 成就检查
+    if (typeof Achievements !== 'undefined') {
+      if (pct === 1) Achievements.check('perfect');
+      Achievements.check('practice_total', stats.total);
+      Achievements.check('first_star', starsHtml.length > 0);
+    }
 
     document.getElementById('practice-progress').style.width = '100%';
   }
 
+  function trackDailyStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    const data = Store.get('dailyStreak', { last: '', count: 0 });
+    if (data.last === today) return; // 今天已记录
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (data.last === yesterday) {
+      data.count++;
+    } else {
+      data.count = 1;
+    }
+    data.last = today;
+    Store.set('dailyStreak', data);
+    if (typeof Achievements !== 'undefined') Achievements.check('daily', data.count);
+  }
+
   function showWrong() {
-    // Restart with only wrong questions
     if (wrongList.length === 0) return;
     const uniqueWrong = [];
     const seen = new Set();
@@ -2308,13 +2811,15 @@ const Practice = (() => {
       if (!seen.has(key)) { seen.add(key); uniqueWrong.push(w); }
     });
     questions = uniqueWrong.map(w => ({ a: w.a, b: w.b, op: w.op, answer: w.answer }));
-    while (questions.length < 10) {
+    questionCount = Math.max(questions.length, 5);
+    while (questions.length < questionCount) {
       questions.push(generateQuestion(range, type));
     }
     wrongList = [];
     score = 0;
     current = 0;
     locked = false;
+    streak = 0;
     document.getElementById('practice-result').classList.add('hidden');
     document.getElementById('practice-game').classList.remove('hidden');
     numpad = createNumpad('practice-numpad', submitAnswer);
@@ -2326,18 +2831,20 @@ const Practice = (() => {
 
 // ===== 闯关模式 =====
 const Challenge = (() => {
+  // 调整后的时间：更宽松的基础时间，答对+5秒奖励
   const LEVEL_CONFIG = [
-    { max: 10, type: 'add', time: 60, boss: false },
-    { max: 10, type: 'sub', time: 60, boss: false },
-    { max: 10, type: 'mix', time: 50, boss: false },
-    { max: 20, type: 'mix', time: 50, boss: false },
-    { max: 20, type: 'mix', time: 35, boss: true },    // Boss
-    { max: 50, type: 'add', time: 50, boss: false },
-    { max: 50, type: 'sub', time: 50, boss: false },
-    { max: 50, type: 'mix', time: 45, boss: false },
-    { max: 100, type: 'mix', time: 45, boss: false },
-    { max: 100, type: 'mix', time: 30, boss: true }     // Final Boss
+    { max: 10, type: 'add', time: 75, boss: false },
+    { max: 10, type: 'sub', time: 75, boss: false },
+    { max: 10, type: 'mix', time: 65, boss: false },
+    { max: 20, type: 'mix', time: 65, boss: false },
+    { max: 20, type: 'mix', time: 45, boss: true },    // Boss
+    { max: 50, type: 'add', time: 65, boss: false },
+    { max: 50, type: 'sub', time: 65, boss: false },
+    { max: 50, type: 'mix', time: 55, boss: false },
+    { max: 100, type: 'mix', time: 55, boss: false },
+    { max: 100, type: 'mix', time: 40, boss: true }     // Final Boss
   ];
+  const TIME_BONUS = 5; // 答对+5秒
 
   let currentLevel = 0;
   let questions = [], current = 0, correctCount = 0;
@@ -2466,9 +2973,11 @@ const Challenge = (() => {
       FX.firework(window.innerWidth / 2, window.innerHeight / 4);
       const blankEl = document.querySelector('#challenge-equation .blank');
       if (blankEl) { blankEl.textContent = q.answer; blankEl.style.color = 'var(--success)'; blankEl.style.borderColor = 'var(--success)'; }
-      feedbackEl.innerHTML = `<span class="feedback-correct">${App.t('correct')}</span>`;
+      // 时间奖励 +5秒
+      timeLeft += TIME_BONUS;
+      updateTimerDisplay();
+      feedbackEl.innerHTML = `<span class="feedback-correct">${App.t('correct')}</span> <span class="time-bonus">${App.t('time_bonus')}</span>`;
       if (numpad) numpad.disable();
-      // 🔊 读出得到金币
       const coinPhrases = App.lang === 'zh'
         ? ['毛毛太棒了！', '毛毛答对了！', '毛毛好厉害！', '毛毛真棒！', '毛毛正确！']
         : ['Awesome Maomao!', 'Maomao got it!', 'Great job Maomao!', 'Yes Maomao!', 'Correct Maomao!'];
@@ -2486,11 +2995,9 @@ const Challenge = (() => {
     } else {
       Sound.wrong();
       if (numpad) numpad.clear();
-      feedbackEl.innerHTML = `<span class="feedback-wrong">${App.t('wrong')}</span>`;
-      const msgs = App.t('encourage');
-      setTimeout(() => {
-        feedbackEl.innerHTML = `<span class="feedback-encourage">${msgs[Math.floor(Math.random() * msgs.length)]}</span>`;
-      }, 800);
+      // 闯关模式也用成长型思维消息
+      const msgs = App.t('wrong_growth');
+      feedbackEl.innerHTML = `<span class="feedback-wrong">${msgs[Math.floor(Math.random() * msgs.length)]}</span>`;
     }
   }
 
@@ -2535,6 +3042,12 @@ const Challenge = (() => {
       const allStars = Store.get('challengeStars', {});
       allStars[currentLevel] = Math.max(allStars[currentLevel] || 0, stars);
       Store.set('challengeStars', allStars);
+      // 成就检查
+      if (typeof Achievements !== 'undefined') {
+        Achievements.check('first_star', true);
+        const maxLvl = Store.get('challengeLevel', 0);
+        Achievements.check('challenge_level', maxLvl);
+      }
     }
   }
 
@@ -2544,6 +3057,155 @@ const Challenge = (() => {
   }
 
   return { init, renderMap, showMap, selectLevel, retry, speakCurrent };
+})();
+
+// ===== 成就系统 =====
+const Achievements = (() => {
+  const DEFS = [
+    { id: 'first_star', icon: '⭐' },
+    { id: 'perfect', icon: '💯' },
+    { id: 'streak_5', icon: '🔥' },
+    { id: 'streak_10', icon: '💥' },
+    { id: 'learn_all', icon: '🎓' },
+    { id: 'challenge_5', icon: '🏰' },
+    { id: 'practice_50', icon: '📚' },
+    { id: 'daily_3', icon: '📅' }
+  ];
+
+  function getUnlocked() {
+    return Store.get('achievements', []);
+  }
+
+  function unlock(id) {
+    const list = getUnlocked();
+    if (list.includes(id)) return false;
+    list.push(id);
+    Store.set('achievements', list);
+    // 显示解锁通知
+    const name = App.t('achievement_' + id);
+    App.toast(`${App.t('new_achievement')} ${name}`);
+    Sound.oneUp();
+    FX.confetti();
+    return true;
+  }
+
+  function check(type, value) {
+    switch (type) {
+      case 'first_star':
+        if (value) unlock('first_star');
+        break;
+      case 'perfect':
+        unlock('perfect');
+        break;
+      case 'streak':
+        if (value >= 5) unlock('streak_5');
+        if (value >= 10) unlock('streak_10');
+        break;
+      case 'learn_complete':
+        const completed = Store.get('learnCompleted', []);
+        if (completed.length >= 10) unlock('learn_all');
+        break;
+      case 'challenge_level':
+        if (value >= 5) unlock('challenge_5');
+        break;
+      case 'practice_total':
+        if (value >= 50) unlock('practice_50');
+        break;
+      case 'daily':
+        if (value >= 3) unlock('daily_3');
+        break;
+    }
+  }
+
+  function render(containerId) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const unlocked = getUnlocked();
+    el.innerHTML = DEFS.map(d => {
+      const got = unlocked.includes(d.id);
+      return `<div class="achievement-badge ${got ? 'unlocked' : 'locked'}">
+        <span class="achievement-icon">${got ? d.icon : '🔒'}</span>
+        <div class="achievement-name">${App.t('achievement_' + d.id)}</div>
+        <div class="achievement-desc">${App.t('achievement_' + d.id + '_desc')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  return { check, render, getUnlocked, DEFS };
+})();
+
+// ===== 家长面板 =====
+const ParentDashboard = (() => {
+  function show() {
+    const pwd = prompt(App.t('parent_password'));
+    if (pwd !== '1234') return;
+    App.goTo('parent', true);
+    render();
+  }
+
+  function render() {
+    const el = document.getElementById('parent-content');
+    if (!el) return;
+
+    const stats = Store.get('practiceStats', { total: 0, correct: 0, sessions: [], byRange: {} });
+    const streak = Store.get('dailyStreak', { count: 0 });
+    const achievements = Achievements.getUnlocked();
+
+    if (stats.total === 0) {
+      el.innerHTML = `<div class="parent-empty">${App.t('parent_no_data')}</div>`;
+      return;
+    }
+
+    const accuracy = stats.total > 0 ? Math.round(stats.correct / stats.total * 100) : 0;
+
+    // 找出薄弱和擅长领域
+    let weak = [], strong = [];
+    Object.entries(stats.byRange).forEach(([key, data]) => {
+      const acc = data.total > 0 ? data.correct / data.total : 0;
+      const [r, t] = key.split('_');
+      const label = `${r}以内${t === 'add' ? '加法' : t === 'sub' ? '减法' : '混合'}`;
+      if (acc < 0.7 && data.total >= 3) weak.push({ label, acc: Math.round(acc * 100) });
+      if (acc >= 0.9 && data.total >= 5) strong.push({ label, acc: Math.round(acc * 100) });
+    });
+
+    // 最近5次练习
+    const recent = stats.sessions.slice(-5).reverse();
+
+    el.innerHTML = `
+      <div class="parent-stats-grid">
+        <div class="parent-stat-card">
+          <div class="parent-stat-value">${stats.total}</div>
+          <div class="parent-stat-label">${App.t('parent_total_practice')}</div>
+        </div>
+        <div class="parent-stat-card">
+          <div class="parent-stat-value">${accuracy}%</div>
+          <div class="parent-stat-label">${App.t('parent_accuracy')}</div>
+        </div>
+        <div class="parent-stat-card">
+          <div class="parent-stat-value">${streak.count}</div>
+          <div class="parent-stat-label">${App.t('parent_streak')}</div>
+        </div>
+        <div class="parent-stat-card">
+          <div class="parent-stat-value">${achievements.length}/${Achievements.DEFS.length}</div>
+          <div class="parent-stat-label">${App.t('achievements_title')}</div>
+        </div>
+      </div>
+      ${weak.length > 0 ? `<div class="parent-section">
+        <h4>${App.t('parent_weak')}</h4>
+        ${weak.map(w => `<div class="parent-area-item weak">${w.label}: ${w.acc}%</div>`).join('')}
+      </div>` : ''}
+      ${strong.length > 0 ? `<div class="parent-section">
+        <h4>${App.t('parent_strong')}</h4>
+        ${strong.map(s => `<div class="parent-area-item strong">${s.label}: ${s.acc}%</div>`).join('')}
+      </div>` : ''}
+      <div class="parent-section">
+        <h4>${App.t('parent_recent')}</h4>
+        ${recent.map(s => `<div class="parent-recent-item">${s.date} | ${s.range}以内${s.type === 'add' ? '➕' : s.type === 'sub' ? '➖' : '🔀'} | ${s.score}/${s.total}</div>`).join('')}
+      </div>
+    `;
+  }
+
+  return { show, render };
 })();
 
 // ===== 启动 =====
